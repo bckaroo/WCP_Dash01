@@ -1,0 +1,44 @@
+profile_id,geometry_name,census_geography,census_name,profile_type,parcel_name
+ardsley,Ardsley,place,"Ardsley village, New York",village,Ardsley
+bedford,Bedford,county subdivision,"Bedford town, Westchester County, New York",town,Bedford
+briarcliff-manor,Briarcliff Manor,place,"Briarcliff Manor village, New York",village,Briarcliff Manor
+bronxville,Bronxville,place,"Bronxville village, New York",village,Bronxville
+buchanan,Buchanan,place,"Buchanan village, New York",village,Buchanan
+cortlandt,Cortlandt,county subdivision,"Cortlandt town, Westchester County, New York",town,Cortlandt
+croton-on-hudson,Croton-on-Hudson,place,"Croton-on-Hudson village, New York",village,Croton-on-Hudson
+dobbs-ferry,Dobbs Ferry,place,"Dobbs Ferry village, New York",village,Dobbs Ferry
+eastchester,Eastchester,county subdivision,"Eastchester town, Westchester County, New York",town,Eastchester
+elmsford,Elmsford,place,"Elmsford village, New York",village,Elmsford
+greenburgh,Greenburgh,county subdivision,"Greenburgh town, Westchester County, New York",town,Greenburgh
+harrison,Harrison,county subdivision,"Harrison town, Westchester County, New York",coterminous town-village,Harrison
+hastings-on-hudson,Hastings-on-Hudson,place,"Hastings-on-Hudson village, New York",village,Hastings-on-Hudson
+irvington,Irvington,place,"Irvington village, New York",village,Irvington
+larchmont,Larchmont,place,"Larchmont village, New York",village,Larchmont
+lewisboro,Lewisboro,county subdivision,"Lewisboro town, Westchester County, New York",town,Lewisboro
+mamaroneck-town,Mamaroneck Town,county subdivision,"Mamaroneck town, Westchester County, New York",town,Mamaroneck
+mamaroneck-village,Mamaroneck Village,place,"Mamaroneck village, New York",village,"Mamaroneck, Village"
+mount-kisco,Mount Kisco,county subdivision,"Mount Kisco town, Westchester County, New York",coterminous town-village,Mount Kisco
+mount-pleasant,Mount Pleasant,county subdivision,"Mount Pleasant town, Westchester County, New York",town,Mount Pleasant
+mount-vernon,Mount Vernon,county subdivision,"Mount Vernon city, Westchester County, New York",city,Mount Vernon
+new-castle,New Castle,county subdivision,"New Castle town, Westchester County, New York",town,New Castle
+new-rochelle,New Rochelle,county subdivision,"New Rochelle city, Westchester County, New York",city,New Rochelle
+north-castle,North Castle,county subdivision,"North Castle town, Westchester County, New York",town,North Castle
+north-salem,North Salem,county subdivision,"North Salem town, Westchester County, New York",town,North Salem
+ossining-town,Ossining Town,county subdivision,"Ossining town, Westchester County, New York",town,Ossining
+ossining-village,Ossining Village,place,"Ossining village, New York",village,"Ossining, Village"
+peekskill,Peekskill,county subdivision,"Peekskill city, Westchester County, New York",city,Peekskill
+pelham,Pelham,place,"Pelham village, New York",village,Pelham
+pelham-manor,Pelham Manor,place,"Pelham Manor village, New York",village,Pelham Manor
+pleasantville,Pleasantville,place,"Pleasantville village, New York",village,Pleasantville
+port-chester,Port Chester,place,"Port Chester village, New York",village,Port Chester
+pound-ridge,Pound Ridge,county subdivision,"Pound Ridge town, Westchester County, New York",town,Pound Ridge
+rye-brook,Rye Brook,place,"Rye Brook village, New York",village,Rye Brook
+rye-city,Rye City,county subdivision,"Rye city, Westchester County, New York",city,Rye
+scarsdale,Scarsdale,county subdivision,"Scarsdale town, Westchester County, New York",coterminous town-village,Scarsdale
+sleepy-hollow,Sleepy Hollow,place,"Sleepy Hollow village, New York",village,Sleepy Hollow
+somers,Somers,county subdivision,"Somers town, Westchester County, New York",town,Somers
+tarrytown,Tarrytown,place,"Tarrytown village, New York",village,Tarrytown
+tuckahoe,Tuckahoe,place,"Tuckahoe village, New York",village,Tuckahoe
+white-plains,White Plains,county subdivision,"White Plains city, Westchester County, New York",city,White Plains
+yonkers,Yonkers,county subdivision,"Yonkers city, Westchester County, New York",city,Yonkers
+yorktown,Yorktown,county subdivision,"Yorktown town, Westchester County, New York",town,Yorktown

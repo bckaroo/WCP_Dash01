@@ -1,0 +1,24 @@
+{
+  "generated_at": "2026-09-13T09:37:00+00:00",
+  "profile_count_including_county": 46,
+  "municipality_profile_count": 45,
+  "base_map_profile_count": 43,
+  "overlapping_town_aggregate_count": 2,
+  "county_subdivision_rows_observed": 25,
+  "county_boundary_rows_observed": 45,
+  "county_boundary_unique_names": 43,
+  "parcel_stat_groups": 3047,
+  "aggregate_parcel_stat_groups": 148,
+  "parcel_roll_year_max": 2025.0,
+  "parcel_spatial_year_max": 2025.0,
+  "gis": {
+    "geojson": "artifacts/gis/wcp_community_profiles_2024.geojson",
+    "gpkg": "artifacts/gis/wcp_community_profiles_2024.gpkg",
+    "shapefile_zip": "artifacts/gis/wcp_profiles_2024_shapefile.zip"
+  },
+  "aggregate_gis": {
+    "geojson": "artifacts/gis/wcp_town_aggregates_2024.geojson",
+    "gpkg": "artifacts/gis/wcp_town_aggregates_2024.gpkg",
+    "web_geojson": "data/town_aggregate_boundaries.geojson"
+  }
+}

@@ -1,0 +1,17 @@
+shapefile_field,rich_field,definition
+id,profile_id,Stable dashboard slug
+name,name,County profile display name
+type,profile_type,"City, town, or village"
+cgeog,census_geography,ACS geography used
+geoid,census_geoid,Full Census GEOID
+acsyr,acs_year,ACS 5-year vintage
+pop,population,Total population estimate
+pop_moe,population_moe,Population 90% MOE
+medhhinc,median_household_income,"Median household income, nominal vintage dollars"
+mhi_moe,median_household_income_moe,Median household income 90% MOE
+hunits,housing_units,Housing units estimate
+own_pct,owner_occupied_pct,Owner share of occupied tenure units
+vac_pct,vacancy_rate_pct,Vacant share of housing units
+trn_pct,public_transit_pct,"Public transit share, workers 16+"
+wfh_pct,worked_from_home_pct,"Work-from-home share, workers 16+"
+lu_acres,assessor_parcel_acres,"Mapped assessment-parcel acres, duplicate geometries excluded"

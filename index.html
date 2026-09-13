@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Westchester County community profiles using Census ACS and County GIS data.">
+  <title>Westchester Community Profiles</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#profile-main">Skip to profile</a>
+  <header class="masthead">
+    <a class="brand" href="#/profile/westchester-county" aria-label="Westchester Community Profiles home">
+      <span class="brand-mark" aria-hidden="true">W</span>
+      <span><strong>Westchester County</strong><small>Community Profiles</small></span>
+    </a>
+    <div class="header-meta"><span class="live-dot"></span> Official public data <span id="vintageLabel">Loading…</span></div>
+  </header>
+
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Community navigation">
+      <div class="sidebar-heading">
+        <p class="eyebrow">Explore the county</p>
+        <h1>Choose a community</h1>
+      </div>
+      <label class="search-box">
+        <span class="sr-only">Search communities</span>
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m21 21-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"/></svg>
+        <input id="communitySearch" type="search" placeholder="Search 45 profiles…" autocomplete="off">
+      </label>
+      <select id="communitySelect" aria-label="Choose a community"></select>
+      <nav id="communityList" class="community-list" aria-label="Community profiles"></nav>
+      <div class="sidebar-note">
+        <strong>45 municipal-government profiles</strong>
+        <span>43 non-overlapping County map geographies plus 2 overlapping town aggregates. Coterminous town-villages are represented once; Rye City and Town of Rye are separate.</span>
+      </div>
+    </aside>
+
+    <main id="profile-main" tabindex="-1">
+      <section class="hero">
+        <div>
+          <p class="eyebrow" id="profileType">County profile</p>
+          <h2 id="profileName">Westchester County</h2>
+          <p id="profileDescription" class="lede">A current statistical and land-use portrait built from official sources.</p>
+        </div>
+        <div class="hero-actions">
+          <button id="copyLink" class="button secondary" type="button">Copy profile link</button>
+          <button class="button" type="button" onclick="window.print()">Print profile</button>
+        </div>
+      </section>
+
+      <nav id="themeTabs" class="theme-tabs" aria-label="Profile topics">
+        <button type="button" data-theme="population" aria-selected="true">Population</button>
+        <button type="button" data-theme="housing">Housing</button>
+        <button type="button" data-theme="commute">Commute</button>
+        <button type="button" data-theme="land-use">Land use</button>
+        <button type="button" data-theme="methods">Sources & methods</button>
+      </nav>
+
+      <div id="status" class="status" role="status">Loading verified profile data…</div>
+      <section id="dashboard" hidden>
+        <div class="overview-grid">
+          <article class="map-card card">
+            <div class="card-heading">
+              <div><p class="eyebrow">County context</p><h3 id="mapHeading">Municipal map</h3></div>
+              <button id="resetMap" class="text-button" type="button">County view</button>
+            </div>
+            <div id="map" class="map" role="img" aria-label="Interactive map of Westchester County communities"></div>
+            <p id="mapHelp" class="map-help">Select a community on the map or in the directory. Base polygons are County GIS data; split village parts are unioned by name.</p>
+          </article>
+          <div id="keyFacts" class="key-facts" aria-label="Key facts"></div>
+        </div>
+        <section id="themeContent" class="theme-content" aria-live="polite"></section>
+        <section class="download-strip">
+          <div><p class="eyebrow">Open data</p><h3>Download the profile geography</h3><p>GIS-ready boundaries include selected ACS metrics and documented field names.</p></div>
+          <div class="download-actions">
+            <a class="button secondary" href="artifacts/gis/wcp_profiles_2024_shapefile.zip" download>Shapefile ZIP</a>
+            <a class="button secondary" href="artifacts/gis/wcp_community_profiles_2024.gpkg" download>GeoPackage</a>
+            <a class="button secondary" href="artifacts/gis/wcp_community_profiles_2024.geojson" download>GeoJSON</a>
+            <a class="button secondary" href="artifacts/gis/wcp_town_aggregates_2024.geojson" download>Town overlays</a>
+          </div>
+        </section>
+      </section>
+      <noscript>This dashboard requires JavaScript to display the profile data.</noscript>
+    </main>
+  </div>
+  <footer><span>Westchester Community Profiles prototype</span><span>ACS estimates include 90% margins of error</span></footer>
+  <script src="app.js"></script>
+</body>
+</html>
