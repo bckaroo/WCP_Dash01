@@ -28,12 +28,12 @@
   }
 
   function barRows(items, max = 100, suffix = '%') {
-    return `<div class="bar-list">${items.map(({ label, metric, value }) => {
+    return `<div class="bar-list" role="list">${items.map(({ label, metric, value }) => {
       const estimate = value ?? metric?.estimate;
       const width = estimate == null ? 0 : Math.max(0, Math.min(100, estimate / max * 100));
       const display = estimate == null ? 'N/A' : suffix === '%' ? `${oneDecimal.format(estimate)}%` : suffix === 'acres' ? `${number.format(estimate)} ac` : number.format(estimate);
-      const title = metric ? moeText(metric, suffix === '%' ? 'percent' : 'number') : 'County GIS parcel observation; no sampling MOE';
-      return `<div class="bar-row" title="${escapeHtml(title)}"><span>${escapeHtml(label)}</span><span class="bar-track"><span class="bar-fill" style="width:${width}%"></span></span><strong class="bar-value">${display}</strong></div>`;
+      const uncertainty = metric ? moeText(metric, suffix === '%' ? 'percent' : 'number') : 'County GIS observation; no sampling MOE';
+      return `<div class="bar-row" role="listitem" aria-label="${escapeHtml(`${label}: ${display}; ${uncertainty}`)}"><span>${escapeHtml(label)}</span><span class="bar-track" aria-hidden="true"><span class="bar-fill" style="width:${width}%"></span></span><strong class="bar-value">${display}</strong><span class="bar-moe">${escapeHtml(uncertainty)}</span></div>`;
     }).join('')}</div>`;
   }
 
@@ -50,6 +50,10 @@
 
   function getProfile(id) {
     return state.data.profiles.find((profile) => profile.id === id) || state.data.profiles[0];
+  }
+
+  function themeRoute(profileId = state.currentId, theme = state.theme) {
+    return `#/profile/${profileId}/theme/${theme}`;
   }
 
   function renderKeyFacts(profile) {
@@ -146,6 +150,57 @@
     </div>`;
   }
 
+  function renderEconomy(profile) {
+    const economy = state.data.metadata.economic_context;
+    const cbp = economy.business_patterns;
+    const cpi = economy.cpi;
+    const latest = cpi.latest;
+    const observations = cpi.observations.slice(0, 12);
+    const contextNote = profile.id === 'westchester-county'
+      ? 'These observations describe Westchester County and the New York metropolitan price area.'
+      : `${profile.name} does not have a directly published County Business Patterns observation. County and regional context is shown without allocating values to the municipality.`;
+    return `<div class="section-grid">
+      <aside class="note full"><strong>Geography matters.</strong> ${escapeHtml(contextNote)}</aside>
+      <article class="data-card card">
+        <h3>County business activity</h3>
+        <p>U.S. Census Bureau County Business Patterns, ${cbp.vintage}. Payroll is published in thousands of dollars.</p>
+        <div class="inline-stats">
+          <div class="inline-stat"><strong>${number.format(cbp.establishments)}</strong><span>Employer establishments</span></div>
+          <div class="inline-stat"><strong>${number.format(cbp.employees)}</strong><span>Employees</span></div>
+          <div class="inline-stat"><strong>${currency.format(cbp.annual_payroll_thousands * 1000)}</strong><span>Annual payroll</span></div>
+        </div>
+        <p class="compare">${escapeHtml(cbp.limitation)} <a href="${escapeHtml(cbp.source)}" target="_blank" rel="noreferrer">Census CBP source</a></p>
+      </article>
+      <article class="data-card card">
+        <h3>Regional inflation context</h3>
+        <p>${escapeHtml(cpi.series_name)}. This index supports constant-dollar comparisons; it is not a local cost-of-living score.</p>
+        <div class="inline-stats">
+          <div class="inline-stat"><strong>${oneDecimal.format(latest.value)}</strong><span>${escapeHtml(latest.period_name)} ${latest.year} index</span></div>
+          <div class="inline-stat"><strong>${latest.year_over_year_pct == null ? 'N/A' : `${oneDecimal.format(latest.year_over_year_pct)}%`}</strong><span>Year-over-year change</span></div>
+          <div class="inline-stat"><strong>1982–84</strong><span>Index base = 100</span></div>
+        </div>
+        <p class="compare">${escapeHtml(cpi.limitation)} <a href="${escapeHtml(cpi.source)}" target="_blank" rel="noreferrer">BLS source and history</a></p>
+      </article>
+      <article class="data-card card full">
+        <h3>Recent CPI observations</h3>
+        <p>Newest available numeric observations. A missing month is not interpolated.</p>
+        <table class="data-table"><caption class="sr-only">Recent New York metropolitan CPI-U observations</caption><thead><tr><th scope="col">Period</th><th scope="col">Series</th><th scope="col">Index</th></tr></thead><tbody>${observations.map((item) => `<tr><td>${escapeHtml(item.period_name)} ${item.year}</td><td>${escapeHtml(cpi.series_id)}</td><td>${oneDecimal.format(item.value)}</td></tr>`).join('')}</tbody></table>
+      </article>
+    </div>`;
+  }
+
+  function statusClass(status) {
+    return `status-${status.replace(/—/g, '-').replace(/[^a-z]+/gi, '-').replace(/^-|-$/g, '').toLowerCase()}`;
+  }
+
+  function requirementRows() {
+    return state.data.metadata.requirements.map((item) => `<div class="requirement">
+      <span class="requirement-id">${escapeHtml(item.id)}</span>
+      <span><strong>${escapeHtml(item.title)}</strong><span class="requirement-note">${escapeHtml(item.note)}</span></span>
+      <span class="status-badge ${statusClass(item.status)}">${escapeHtml(item.status)}</span>
+    </div>`).join('');
+  }
+
   function renderMethods(profile) {
     const md = state.data.metadata;
     const boundaryMetadata = profile.map_role === 'aggregate overlay' ? md.aggregate_boundaries : md.boundaries;
@@ -172,7 +227,12 @@
         </ul>
       </article>
       <article class="data-card card full">
-        <h3>Known gaps and next integrations</h3><p>Unavailable data are not represented with proxy metrics.</p>
+        <h3>Requirements coverage · GR-01 through GR-16</h3>
+        <p>Recovered from the pre-workshop requirements traceability matrix. Status reflects this prototype—not a production acceptance decision. Workshop priority and phase remain unconfirmed.</p>
+        <div class="requirement-list">${requirementRows()}</div>
+      </article>
+      <article class="data-card card full">
+        <h3>External data gaps</h3><p>Unavailable data are not represented with proxy metrics. Located-but-not-integrated sources are distinguished in the checklist above.</p>
         <ul class="gap-list">${md.known_gaps.map((gap) => `<li>${escapeHtml(gap)}</li>`).join('')}</ul>
       </article>
       <article class="data-card card full">
@@ -191,9 +251,13 @@
   }
 
   function renderTheme(profile) {
-    const renderers = { population: renderPopulation, housing: renderHousing, commute: renderCommute, 'land-use': renderLandUse, methods: renderMethods };
+    const renderers = { population: renderPopulation, housing: renderHousing, commute: renderCommute, 'land-use': renderLandUse, economy: renderEconomy, methods: renderMethods };
     $('#themeContent').innerHTML = renderers[state.theme](profile);
-    $$('#themeTabs button').forEach((button) => button.setAttribute('aria-selected', String(button.dataset.theme === state.theme)));
+    $$('#themeTabs button').forEach((button) => {
+      const selected = button.dataset.theme === state.theme;
+      button.setAttribute('aria-selected', String(selected));
+      button.setAttribute('tabindex', selected ? '0' : '-1');
+    });
   }
 
   function allCoordinates(geometry) {
@@ -240,7 +304,7 @@
     const mapTitle = aggregateFeature ? `${aggregateFeature.properties.name} overlapping town boundary in Westchester County` : 'Westchester County community boundaries';
     $('#map').innerHTML = `<svg viewBox="0 0 ${width} ${height}" aria-labelledby="mapTitle"><title id="mapTitle">${escapeHtml(mapTitle)}</title><g fill-rule="evenodd">${paths}${overlay}</g></svg>`;
     $$('#map path').forEach((path) => {
-      const go = () => { window.location.hash = `#/profile/${path.dataset.id}`; };
+      const go = () => { window.location.hash = themeRoute(path.dataset.id); };
       path.addEventListener('click', go);
       path.addEventListener('keydown', (event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); go(); } });
     });
@@ -248,7 +312,7 @@
 
   function renderDirectory() {
     const municipalities = state.data.profiles.filter((profile) => profile.id !== 'westchester-county').sort((a, b) => a.name.localeCompare(b.name));
-    $('#communityList').innerHTML = `<a class="community-link" data-id="westchester-county" href="#/profile/westchester-county"><span>County overview</span><small>county</small></a>` + municipalities.map((profile) => `<a class="community-link" data-id="${escapeHtml(profile.id)}" data-search="${escapeHtml(profile.name.toLowerCase())}" href="#/profile/${escapeHtml(profile.id)}"><span>${escapeHtml(profile.name)}</span><small>${escapeHtml(profile.profile_type)}</small></a>`).join('');
+    $('#communityList').innerHTML = `<a class="community-link" data-id="westchester-county" href="${themeRoute('westchester-county')}"><span>County overview</span><small>county</small></a>` + municipalities.map((profile) => `<a class="community-link" data-id="${escapeHtml(profile.id)}" data-search="${escapeHtml(profile.name.toLowerCase())}" href="${themeRoute(profile.id)}"><span>${escapeHtml(profile.name)}</span><small>${escapeHtml(profile.profile_type)}</small></a>`).join('');
     $('#communitySelect').innerHTML = `<option value="westchester-county">Westchester County overview</option>` + municipalities.map((profile) => `<option value="${escapeHtml(profile.id)}">${escapeHtml(profile.name)} · ${escapeHtml(profile.profile_type)}</option>`).join('');
   }
 
@@ -261,7 +325,12 @@
       ? 'Countywide overview with direct access to all 45 municipal-government profiles.'
       : profile.geography_note || `A 2024 ACS and 2025 County parcel profile using ${profile.census_geography} geography.`;
     $('#communitySelect').value = profile.id;
-    $$('.community-link').forEach((link) => link.classList.toggle('active', link.dataset.id === profile.id));
+    $$('.community-link').forEach((link) => {
+      const active = link.dataset.id === profile.id;
+      link.classList.toggle('active', active);
+      link.href = themeRoute(link.dataset.id);
+      if (active) link.setAttribute('aria-current', 'page'); else link.removeAttribute('aria-current');
+    });
     $('#mapHeading').textContent = profile.id === 'westchester-county'
       ? 'Select a community'
       : profile.map_role === 'aggregate overlay' ? `${profile.name} aggregate overlay` : `${profile.name} in county context`;
@@ -275,8 +344,10 @@
   }
 
   function route() {
-    const match = window.location.hash.match(/^#\/profile\/([a-z0-9-]+)$/);
+    const match = window.location.hash.match(/^#\/profile\/([a-z0-9-]+)(?:\/theme\/([a-z-]+))?$/);
+    const validThemes = new Set(['population', 'housing', 'commute', 'land-use', 'economy', 'methods']);
     state.currentId = match ? match[1] : 'westchester-county';
+    state.theme = match && validThemes.has(match[2]) ? match[2] : 'population';
     if (state.data) renderProfile();
   }
 
@@ -294,6 +365,7 @@
       if (state.data.profiles.length !== 46 || state.geo.features.length !== 43 || state.aggregateGeo.features.length !== 2) throw new Error('Profile completeness check failed');
       $('#vintageLabel').textContent = `· ACS ${state.data.metadata.acs.vintage} 5-year`;
       renderDirectory();
+      if (!window.location.hash) history.replaceState(null, '', themeRoute());
       route();
       $('#status').hidden = true;
       $('#dashboard').hidden = false;
@@ -303,17 +375,33 @@
     }
   }
 
+  function filterCommunities(query) {
+    const normalized = query.trim().toLowerCase();
+    $$('.community-link[data-search]').forEach((link) => link.classList.toggle('hidden', !link.dataset.search.includes(normalized)));
+  }
   $('#communitySearch').addEventListener('input', (event) => {
-    const query = event.target.value.trim().toLowerCase();
-    $$('.community-link[data-search]').forEach((link) => link.classList.toggle('hidden', !link.dataset.search.includes(query)));
+    $('#headerCommunitySearch').value = event.target.value;
+    filterCommunities(event.target.value);
   });
-  $('#communitySelect').addEventListener('change', (event) => { window.location.hash = `#/profile/${event.target.value}`; });
-  $('#resetMap').addEventListener('click', () => { window.location.hash = '#/profile/westchester-county'; });
+  $('#headerCommunitySearch').addEventListener('input', (event) => {
+    $('#communitySearch').value = event.target.value;
+    filterCommunities(event.target.value);
+  });
+  $('#communitySelect').addEventListener('change', (event) => { window.location.hash = themeRoute(event.target.value); });
+  $('#resetMap').addEventListener('click', () => { window.location.hash = themeRoute('westchester-county'); });
   $('#themeTabs').addEventListener('click', (event) => {
     const button = event.target.closest('button[data-theme]');
     if (!button) return;
-    state.theme = button.dataset.theme;
-    renderTheme(getProfile(state.currentId));
+    window.location.hash = themeRoute(state.currentId, button.dataset.theme);
+  });
+  $('#themeTabs').addEventListener('keydown', (event) => {
+    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+    const tabs = $$('#themeTabs button');
+    const current = tabs.findIndex((tab) => tab.dataset.theme === state.theme);
+    const next = event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1 : (current + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
+    event.preventDefault();
+    window.location.hash = themeRoute(state.currentId, tabs[next].dataset.theme);
+    tabs[next].focus();
   });
   $('#copyLink').addEventListener('click', async (event) => {
     try {

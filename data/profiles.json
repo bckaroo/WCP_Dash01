@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "Westchester County Community Profiles",
-    "generated_at": "2026-09-13T09:37:00+00:00",
+    "generated_at": "2026-09-15T22:55:42+00:00",
     "acs": {
       "dataset": "American Community Survey 5-year detailed tables",
       "vintage": 2024,
@@ -51,6 +51,316 @@
       "classification": "First digit of NYS ORPTS property class (100–900 series)."
     },
     "commute_universe": "Workers 16 years and over (ACS B08301). Mode shares include work from home; they are not peak-period trip shares.",
+    "economic_context": {
+      "business_patterns": {
+        "vintage": 2022,
+        "geography": "Westchester County, New York",
+        "establishments": 31152,
+        "employees": 371644,
+        "annual_payroll_thousands": 30765591,
+        "source": "https://api.census.gov/data/2022/cbp",
+        "limitation": "County totals only; County Business Patterns does not publish municipality-level observations for this dashboard."
+      },
+      "cpi": {
+        "series_id": "CUURS12ASA0",
+        "series_name": "CPI-U, New York–Newark–Jersey City, all items (1982–84=100)",
+        "source": "https://www.bls.gov/regions/northeast/data/xg-tables/ro2xgcpiny.htm",
+        "latest": {
+          "year": 2026,
+          "period": "M08",
+          "period_name": "August",
+          "value": 362.328,
+          "year_over_year_pct": 4.3
+        },
+        "observations": [
+          {
+            "year": 2026,
+            "period": "M08",
+            "period_name": "August",
+            "value": 362.328
+          },
+          {
+            "year": 2026,
+            "period": "M07",
+            "period_name": "July",
+            "value": 362.189
+          },
+          {
+            "year": 2026,
+            "period": "M06",
+            "period_name": "June",
+            "value": 360.529
+          },
+          {
+            "year": 2026,
+            "period": "M05",
+            "period_name": "May",
+            "value": 361.362
+          },
+          {
+            "year": 2026,
+            "period": "M04",
+            "period_name": "April",
+            "value": 359.774
+          },
+          {
+            "year": 2026,
+            "period": "M03",
+            "period_name": "March",
+            "value": 356.169
+          },
+          {
+            "year": 2026,
+            "period": "M02",
+            "period_name": "February",
+            "value": 353.366
+          },
+          {
+            "year": 2026,
+            "period": "M01",
+            "period_name": "January",
+            "value": 350.947
+          },
+          {
+            "year": 2025,
+            "period": "M12",
+            "period_name": "December",
+            "value": 350.003
+          },
+          {
+            "year": 2025,
+            "period": "M11",
+            "period_name": "November",
+            "value": 348.62
+          },
+          {
+            "year": 2025,
+            "period": "M09",
+            "period_name": "September",
+            "value": 348.096
+          },
+          {
+            "year": 2025,
+            "period": "M08",
+            "period_name": "August",
+            "value": 347.266
+          },
+          {
+            "year": 2025,
+            "period": "M07",
+            "period_name": "July",
+            "value": 346.385
+          },
+          {
+            "year": 2025,
+            "period": "M06",
+            "period_name": "June",
+            "value": 346.332
+          },
+          {
+            "year": 2025,
+            "period": "M05",
+            "period_name": "May",
+            "value": 343.886
+          },
+          {
+            "year": 2025,
+            "period": "M04",
+            "period_name": "April",
+            "value": 344.047
+          },
+          {
+            "year": 2025,
+            "period": "M03",
+            "period_name": "March",
+            "value": 342.508
+          },
+          {
+            "year": 2025,
+            "period": "M02",
+            "period_name": "February",
+            "value": 342.333
+          },
+          {
+            "year": 2025,
+            "period": "M01",
+            "period_name": "January",
+            "value": 341.144
+          },
+          {
+            "year": 2024,
+            "period": "M12",
+            "period_name": "December",
+            "value": 338.61
+          },
+          {
+            "year": 2024,
+            "period": "M11",
+            "period_name": "November",
+            "value": 338.535
+          },
+          {
+            "year": 2024,
+            "period": "M10",
+            "period_name": "October",
+            "value": 338.166
+          },
+          {
+            "year": 2024,
+            "period": "M09",
+            "period_name": "September",
+            "value": 337.889
+          },
+          {
+            "year": 2024,
+            "period": "M08",
+            "period_name": "August",
+            "value": 336.534
+          },
+          {
+            "year": 2024,
+            "period": "M07",
+            "period_name": "July",
+            "value": 335.642
+          },
+          {
+            "year": 2024,
+            "period": "M06",
+            "period_name": "June",
+            "value": 334.782
+          },
+          {
+            "year": 2024,
+            "period": "M05",
+            "period_name": "May",
+            "value": 332.633
+          },
+          {
+            "year": 2024,
+            "period": "M04",
+            "period_name": "April",
+            "value": 331.27
+          },
+          {
+            "year": 2024,
+            "period": "M03",
+            "period_name": "March",
+            "value": 329.829
+          },
+          {
+            "year": 2024,
+            "period": "M02",
+            "period_name": "February",
+            "value": 328.606
+          },
+          {
+            "year": 2024,
+            "period": "M01",
+            "period_name": "January",
+            "value": 328.006
+          }
+        ],
+        "limitation": "Regional inflation context; not a Westchester-specific price index."
+      }
+    },
+    "requirements": [
+      {
+        "id": "GR-01",
+        "title": "Population and demographics",
+        "status": "implemented",
+        "note": "2024 ACS 5-year estimates and 90% MOEs for every profile."
+      },
+      {
+        "id": "GR-02",
+        "title": "Households and occupancy",
+        "status": "implemented",
+        "note": "Occupancy, vacancy, and tenure indicators for every profile."
+      },
+      {
+        "id": "GR-03",
+        "title": "Housing-unit inventory",
+        "status": "implemented",
+        "note": "ACS structure and County parcel context for every profile."
+      },
+      {
+        "id": "GR-04",
+        "title": "Residential construction and permits",
+        "status": "located—not integrated",
+        "note": "County-level Census BPS files are available; municipal permit detail still requires an external request."
+      },
+      {
+        "id": "GR-05",
+        "title": "Housing sales and values",
+        "status": "located—not integrated",
+        "note": "NYS ORPTS RP-5217 sales exports are located; a repeatable municipal ingest is not yet built."
+      },
+      {
+        "id": "GR-06",
+        "title": "Condominium/cooperative inventory",
+        "status": "external data gap",
+        "note": "No complete public feed; County compilation is required."
+      },
+      {
+        "id": "GR-07",
+        "title": "Household and family income",
+        "status": "implemented",
+        "note": "ACS income, home-value, rent, poverty, and burden indicators with MOEs."
+      },
+      {
+        "id": "GR-08",
+        "title": "Employment and unemployment",
+        "status": "located—not integrated",
+        "note": "NYSDOL LAUS is located; QCEW access and geography method remain unresolved."
+      },
+      {
+        "id": "GR-09",
+        "title": "Business and economic activity",
+        "status": "partially implemented",
+        "note": "County Business Patterns establishments, employees, and payroll are integrated; municipal detail is unavailable."
+      },
+      {
+        "id": "GR-10",
+        "title": "Major employers",
+        "status": "external data gap",
+        "note": "Establishment-level QCEW is confidential; a curated County table is required."
+      },
+      {
+        "id": "GR-11",
+        "title": "Consumer Price Index",
+        "status": "implemented",
+        "note": "Current BLS New York metro CPI-U series is integrated with year-over-year change."
+      },
+      {
+        "id": "GR-12",
+        "title": "Transportation infrastructure and service",
+        "status": "partially implemented",
+        "note": "Resident commute mode is implemented; GTFS frequency and network accessibility remain future integrations."
+      },
+      {
+        "id": "GR-13",
+        "title": "Municipal and administrative geography",
+        "status": "implemented",
+        "note": "43 non-overlapping County GIS profiles plus two authoritative town overlays."
+      },
+      {
+        "id": "GR-14",
+        "title": "Schools and enrollment",
+        "status": "located—not integrated",
+        "note": "NYSED enrollment and County school layers are located; the district–municipality crosswalk is not built."
+      },
+      {
+        "id": "GR-15",
+        "title": "Land use and development pattern",
+        "status": "partially implemented",
+        "note": "2025 assessment-parcel acreage by ORPTS primary class is integrated; zoning is not."
+      },
+      {
+        "id": "GR-16",
+        "title": "Historical time series and crosswalks",
+        "status": "partially implemented",
+        "note": "Current geography crosswalk is implemented; historical boundary normalization remains future work."
+      }
+    ],
     "known_gaps": [
       "Municipal building-permit detail is not public in one countywide source.",
       "Condominium/cooperative inventory lacks a complete public feed.",

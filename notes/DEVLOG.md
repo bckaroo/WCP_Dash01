@@ -3,6 +3,17 @@
 Append-only log of each round of development on this repo (part of DevOS
 project **PROJ-023**). New entries go at the top.
 
+## Round 5 — 2026-09-15 · GitHub publication preparation (DEV-119)
+- User authorized upload of the current dashboard to the existing public `bckaroo/WCP_Dash01` repository; preserve its MIT license and remote history without force-pushing.
+- Verified current workspace: `python3 -m pytest -q` (12 passed), `node --check app.js`, and Gitleaks v8.30.1 scans of existing Git history and working directory (no leaks found).
+- Expanded environment-file ignores while retaining the project-owned `.env.PORT` port configuration. Included the current design refresh, data/GIS downloads, and browser QA evidence in the publication snapshot.
+
+## Round 4 — 2026-09-15 · Live redesign rendering verification
+- Reproduced the reported loading-state screenshot against the live Tailnet URL in a fresh Chrome 152 session. The application reached the concrete ready state (`#status[hidden]`, visible `#dashboard`) with 43 map paths, four key facts, and populated theme content; no JavaScript or promise errors were captured. The earlier screenshot was taken before asynchronous JSON/GeoJSON initialization completed, not from a persistent application/data-load defect, so no product-code repair was required.
+- Exercised all 46 profile routes across all six themes (276 route/theme combinations), including Economy and Coverage & methods, with zero failures. Verified municipality-select, tab, directory-search, and SVG-map interactions, plus the Town of Rye aggregate overlay (43 base paths + one overlay).
+- Verified the live index, app assets, all three runtime data files, and all seven GIS/download artifacts returned HTTP 200. Automated verification passed: `python3 -m pytest -q` (12 passed), `node --check app.js`, and Python compile checks.
+- Verified responsive rendering at 390 px with zero horizontal overflow and populated Mount Kisco Economy content. Evidence: `artifacts/verification/browser-qa-report.json`, `final-populated-desktop.png`, `final-populated-mobile.png`, `final-populated-mobile-economy.png`, and `final-populated-mobile-economy-content.png`.
+
 ## Round 3 — 2026-09-13 · All-municipalities aggregate coverage
 - Added separate `Town of Pelham` and `Town of Rye` selector profiles from direct 2024 ACS county-subdivision observations (GEOIDs `0600000US3611957012` and `0600000US3611964320`), bringing the product to county + 45 municipal-government profiles.
 - Preserved the 43-feature non-overlapping County GIS base map and added a separate two-feature 2024 Census TIGER/Line overlay. Rye town correctly renders as a noncontiguous MultiPolygon covering Port Chester/Rye Brook plus the Rye Neck section of Mamaroneck Village; Rye City remains separate.

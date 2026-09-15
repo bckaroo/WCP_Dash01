@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-13T09:37:00+00:00",
+  "generated_at": "2026-09-15T22:55:42+00:00",
   "profile_count_including_county": 46,
   "municipality_profile_count": 45,
   "base_map_profile_count": 43,
@@ -19,6 +19,7 @@
   "aggregate_gis": {
     "geojson": "artifacts/gis/wcp_town_aggregates_2024.geojson",
     "gpkg": "artifacts/gis/wcp_town_aggregates_2024.gpkg",
+    "shapefile_zip": "artifacts/gis/wcp_town_aggregates_2024_shapefile.zip",
     "web_geojson": "data/town_aggregate_boundaries.geojson"
   }
 }

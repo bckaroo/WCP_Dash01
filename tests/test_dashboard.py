@@ -105,14 +105,20 @@ def test_town_aggregate_boundaries_are_authoritative_and_separate():
     web = gpd.read_file(ROOT / "data" / "town_aggregate_boundaries.geojson")
     geojson = gpd.read_file(ROOT / "artifacts" / "gis" / "wcp_town_aggregates_2024.geojson")
     gpkg = gpd.read_file(ROOT / "artifacts" / "gis" / "wcp_town_aggregates_2024.gpkg", layer="town_aggregates")
-    for frame in (web, geojson, gpkg):
+    shp = gpd.read_file(ROOT / "artifacts" / "gis" / "town_aggregate_shapefile" / "wcp_towns.shp")
+    for frame in (web, geojson, gpkg, shp):
         assert len(frame) == 2
         assert frame.crs.to_epsg() == 4326
         assert frame.geometry.notna().all()
         assert frame.geometry.is_valid.all()
-        assert set(frame["profile_id"]) == {"pelham-town", "rye-town"}
+    assert set(web["profile_id"]) == set(geojson["profile_id"]) == set(gpkg["profile_id"]) == {"pelham-town", "rye-town"}
+    assert set(shp["id"]) == {"pelham-town", "rye-town"}
     rye = geojson.loc[geojson["profile_id"] == "rye-town"].iloc[0]
     assert rye.geometry.geom_type == "MultiPolygon"
+
+    bundle = ROOT / "artifacts" / "gis" / "wcp_town_aggregates_2024_shapefile.zip"
+    with zipfile.ZipFile(bundle) as archive:
+        assert {"wcp_towns.shp", "wcp_towns.shx", "wcp_towns.dbf", "wcp_towns.prj", "wcp_towns.cpg", "README.md"} <= set(archive.namelist())
 
 
 def test_gis_formats_counts_crs_and_geometry():
@@ -142,18 +148,49 @@ def test_shapefile_bundle_is_complete_and_ten_character_safe():
 
 def test_dashboard_assets_and_download_links_exist():
     html = (ROOT / "index.html").read_text(encoding="utf-8")
+    css = (ROOT / "styles.css").read_text(encoding="utf-8")
     js = (ROOT / "app.js").read_text(encoding="utf-8")
     assert 'data-theme="population"' in html
     assert 'data-theme="housing"' in html
     assert 'data-theme="commute"' in html
     assert 'data-theme="land-use"' in html
+    assert 'data-theme="economy"' in html
     assert "wcp_profiles_2024_shapefile.zip" in html
+    assert "wcp_town_aggregates_2024_shapefile.zip" in html
+    assert "FIELD_DICTIONARY.csv" in html
     assert "45 municipal-government profiles" in html
     assert "wcp_town_aggregates_2024.geojson" in html
+    assert "Independent planning prototype" in html
+    assert "not an official County-published service" in html
+    assert "Westchester County Home" in html
+    assert "--county-green: #02372d" in css
     assert "Profile completeness check failed" in js
     assert "town_aggregate_boundaries.geojson" in js
+    assert "themeRoute" in js
     for filename in ("index.html", "styles.css", "app.js"):
         assert (ROOT / filename).stat().st_size > 500
+
+
+def test_requirement_coverage_and_economic_context_are_documented():
+    metadata = load_profiles()["metadata"]
+    requirements = metadata["requirements"]
+    assert [item["id"] for item in requirements] == [f"GR-{number:02d}" for number in range(1, 17)]
+    assert {item["status"] for item in requirements} == {
+        "implemented",
+        "partially implemented",
+        "located—not integrated",
+        "external data gap",
+    }
+    assert next(item for item in requirements if item["id"] == "GR-09")["status"] == "partially implemented"
+    assert next(item for item in requirements if item["id"] == "GR-11")["status"] == "implemented"
+
+    economy = metadata["economic_context"]
+    assert economy["business_patterns"]["vintage"] == 2022
+    assert economy["business_patterns"]["establishments"] == 31152
+    assert economy["business_patterns"]["employees"] == 371644
+    assert economy["cpi"]["series_id"] == "CUURS12ASA0"
+    assert economy["cpi"]["latest"]["value"] > 300
+    assert economy["cpi"]["latest"]["year_over_year_pct"] is not None
 
 
 def test_server_port_override_and_cache_targets(monkeypatch, tmp_path):

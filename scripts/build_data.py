@@ -24,6 +24,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "data"
 GIS_DIR = ROOT / "artifacts" / "gis"
 SHP_DIR = GIS_DIR / "shapefile"
+AGG_SHP_DIR = GIS_DIR / "town_aggregate_shapefile"
 CROSSWALK = ROOT / "config" / "geography_crosswalk.csv"
 ACS_YEAR = 2024
 ACS_DATASET = f"{ACS_YEAR}/acs/acs5"
@@ -32,6 +33,10 @@ BOUNDARY_URL = "https://giswww.westchestergov.com/arcgis/rest/services/Datahub_B
 PARCEL_URL = "https://giswww.westchestergov.com/arcgis/rest/services/DataHub_TaxParcels/MapServer/0/query"
 TIGER_COUSUB_URL = "https://www2.census.gov/geo/tiger/TIGER2024/COUSUB/tl_2024_36_cousub.zip"
 USER_AGENT = "WCP-Community-Dashboard/1.0 (public-data build; Westchester County profile prototype)"
+CBP_YEAR = 2022
+CBP_BASE = f"https://api.census.gov/data/{CBP_YEAR}/cbp"
+BLS_API = "https://api.bls.gov/publicAPI/v2/timeseries/data/"
+BLS_CPI_SERIES = "CUURS12ASA0"
 
 AGGREGATE_TOWNS = [
     {
@@ -117,6 +122,103 @@ def get_bytes(url: str, attempts: int = 4) -> bytes:
             last_error = exc
             time.sleep(2**attempt)
     raise RuntimeError(f"Request failed after {attempts} attempts: {url}: {last_error}")
+
+
+def post_json(url: str, payload: dict, attempts: int = 4):
+    """POST JSON with the same bounded retry policy used by the build's GETs."""
+    last_error = None
+    body = json.dumps(payload).encode("utf-8")
+    for attempt in range(attempts):
+        try:
+            req = urllib.request.Request(
+                url,
+                data=body,
+                headers={"User-Agent": USER_AGENT, "Accept": "application/json", "Content-Type": "application/json"},
+            )
+            with urllib.request.urlopen(req, timeout=180) as response:
+                return json.load(response)
+        except Exception as exc:  # pragma: no cover - network fallback
+            last_error = exc
+            time.sleep(2**attempt)
+    raise RuntimeError(f"POST failed after {attempts} attempts: {url}: {last_error}")
+
+
+def economic_context():
+    """Retrieve County Business Patterns and New York metro CPI context."""
+    cbp_params = {"get": "NAME,ESTAB,EMP,PAYANN", "for": "county:119", "in": "state:36"}
+    key = load_census_key()
+    if key:
+        cbp_params["key"] = key
+    cbp_payload = get_json(CBP_BASE, cbp_params)
+    cbp = dict(zip(cbp_payload[0], cbp_payload[1]))
+
+    current_year = datetime.now(timezone.utc).year
+    bls = post_json(BLS_API, {
+        "seriesid": [BLS_CPI_SERIES],
+        "startyear": str(current_year - 2),
+        "endyear": str(current_year),
+    })
+    if bls.get("status") != "REQUEST_SUCCEEDED":
+        raise AssertionError(f"BLS CPI request failed: {bls.get('message')}")
+    observations = []
+    for item in bls["Results"]["series"][0].get("data", []):
+        try:
+            value = float(item["value"])
+        except (TypeError, ValueError):
+            continue
+        observations.append({
+            "year": int(item["year"]), "period": item["period"],
+            "period_name": item["periodName"], "value": value,
+        })
+    if not observations:
+        raise AssertionError("BLS CPI returned no numeric observations")
+    latest = observations[0]
+    prior = next(
+        (item for item in observations if item["year"] == latest["year"] - 1 and item["period"] == latest["period"]),
+        None,
+    )
+    latest = {
+        **latest,
+        "year_over_year_pct": rounded((latest["value"] / prior["value"] - 1) * 100) if prior else None,
+    }
+    return {
+        "business_patterns": {
+            "vintage": CBP_YEAR, "geography": cbp["NAME"],
+            "establishments": int(cbp["ESTAB"]), "employees": int(cbp["EMP"]),
+            "annual_payroll_thousands": int(cbp["PAYANN"]), "source": CBP_BASE,
+            "limitation": "County totals only; County Business Patterns does not publish municipality-level observations for this dashboard.",
+        },
+        "cpi": {
+            "series_id": BLS_CPI_SERIES,
+            "series_name": "CPI-U, New York–Newark–Jersey City, all items (1982–84=100)",
+            "source": "https://www.bls.gov/regions/northeast/data/xg-tables/ro2xgcpiny.htm",
+            "latest": latest, "observations": observations,
+            "limitation": "Regional inflation context; not a Westchester-specific price index.",
+        },
+    }
+
+
+def requirement_coverage():
+    """Workshop-draft RTM coverage, updated only for integrations in this build."""
+    rows = [
+        ("GR-01", "Population and demographics", "implemented", "2024 ACS 5-year estimates and 90% MOEs for every profile."),
+        ("GR-02", "Households and occupancy", "implemented", "Occupancy, vacancy, and tenure indicators for every profile."),
+        ("GR-03", "Housing-unit inventory", "implemented", "ACS structure and County parcel context for every profile."),
+        ("GR-04", "Residential construction and permits", "located—not integrated", "County-level Census BPS files are available; municipal permit detail still requires an external request."),
+        ("GR-05", "Housing sales and values", "located—not integrated", "NYS ORPTS RP-5217 sales exports are located; a repeatable municipal ingest is not yet built."),
+        ("GR-06", "Condominium/cooperative inventory", "external data gap", "No complete public feed; County compilation is required."),
+        ("GR-07", "Household and family income", "implemented", "ACS income, home-value, rent, poverty, and burden indicators with MOEs."),
+        ("GR-08", "Employment and unemployment", "located—not integrated", "NYSDOL LAUS is located; QCEW access and geography method remain unresolved."),
+        ("GR-09", "Business and economic activity", "partially implemented", "County Business Patterns establishments, employees, and payroll are integrated; municipal detail is unavailable."),
+        ("GR-10", "Major employers", "external data gap", "Establishment-level QCEW is confidential; a curated County table is required."),
+        ("GR-11", "Consumer Price Index", "implemented", "Current BLS New York metro CPI-U series is integrated with year-over-year change."),
+        ("GR-12", "Transportation infrastructure and service", "partially implemented", "Resident commute mode is implemented; GTFS frequency and network accessibility remain future integrations."),
+        ("GR-13", "Municipal and administrative geography", "implemented", "43 non-overlapping County GIS profiles plus two authoritative town overlays."),
+        ("GR-14", "Schools and enrollment", "located—not integrated", "NYSED enrollment and County school layers are located; the district–municipality crosswalk is not built."),
+        ("GR-15", "Land use and development pattern", "partially implemented", "2025 assessment-parcel acreage by ORPTS primary class is integrated; zoning is not."),
+        ("GR-16", "Historical time series and crosswalks", "partially implemented", "Current geography crosswalk is implemented; historical boundary normalization remains future work."),
+    ]
+    return [{"id": req_id, "title": title, "status": status, "note": note} for req_id, title, status, note in rows]
 
 
 def chunks(values, size):
@@ -544,6 +646,26 @@ def export_aggregate_gis(profiles_by_id, tiger_frame):
     if gpkg_path.exists():
         gpkg_path.unlink()
     gdf.to_file(gpkg_path, layer="town_aggregates", driver="GPKG")
+
+    AGG_SHP_DIR.mkdir(parents=True, exist_ok=True)
+    for old in AGG_SHP_DIR.glob("wcp_towns.*"):
+        old.unlink()
+    shp_rows = [{
+        "id": row["profile_id"], "name": row["name"], "type": "town agg",
+        "geoid": row["census_geoid"], "acsyr": row["acs_year"],
+        "pop": row["population"], "pop_moe": row["population_moe"],
+        "medhhinc": row["median_household_income"], "lu_acres": row["assessor_parcel_acres"],
+    } for row in rows]
+    shp_gdf = gpd.GeoDataFrame(shp_rows, geometry=geometries, crs="EPSG:4326")
+    shp_path = AGG_SHP_DIR / "wcp_towns.shp"
+    shp_gdf.to_file(shp_path, driver="ESRI Shapefile", encoding="UTF-8")
+    zip_path = GIS_DIR / "wcp_town_aggregates_2024_shapefile.zip"
+    with zipfile.ZipFile(zip_path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+        for component in sorted(AGG_SHP_DIR.glob("wcp_towns.*")):
+            archive.write(component, component.name)
+        if (GIS_DIR / "README.md").exists():
+            archive.write(GIS_DIR / "README.md", "README.md")
+
     web_geojson = json.loads(geojson_path.read_text(encoding="utf-8"))
     (DATA_DIR / "town_aggregate_boundaries.geojson").write_text(
         json.dumps(web_geojson, separators=(",", ":")), encoding="utf-8"
@@ -551,6 +673,7 @@ def export_aggregate_gis(profiles_by_id, tiger_frame):
     return {
         "geojson": str(geojson_path.relative_to(ROOT)),
         "gpkg": str(gpkg_path.relative_to(ROOT)),
+        "shapefile_zip": str(zip_path.relative_to(ROOT)),
         "web_geojson": "data/town_aggregate_boundaries.geojson",
     }
 
@@ -573,6 +696,7 @@ def main():
     by_place = {row["NAME"]: row for row in place_rows}
 
     parcel_records, aggregate_parcel_records, parcel_vintage = parcel_stats()
+    economy = economic_context()
     land_by_muni, county_land = summarize_land_use(parcel_records)
     aggregate_land, _ = summarize_land_use(aggregate_parcel_records)
     retrieved_at = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
@@ -664,6 +788,8 @@ def main():
             "classification": "First digit of NYS ORPTS property class (100–900 series).",
         },
         "commute_universe": "Workers 16 years and over (ACS B08301). Mode shares include work from home; they are not peak-period trip shares.",
+        "economic_context": economy,
+        "requirements": requirement_coverage(),
         "known_gaps": [
             "Municipal building-permit detail is not public in one countywide source.",
             "Condominium/cooperative inventory lacks a complete public feed.",

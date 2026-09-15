@@ -1,0 +1,37 @@
+{
+  "base": "https://vengeance.tail92bcba.ts.net:9010/",
+  "profiles": 46,
+  "themes": 6,
+  "route_theme_checks": 276,
+  "failures": [],
+  "interactions": {
+    "select": true,
+    "tab": true,
+    "search": true,
+    "map": true
+  },
+  "desktop": {
+    "profile": "Town of Rye",
+    "theme": "land-use",
+    "paths": 44,
+    "overlay": 1,
+    "statusHidden": true,
+    "dashboardHidden": false,
+    "errors": []
+  },
+  "mobile": {
+    "vw": 390,
+    "profile": "Mount Kisco",
+    "theme": "economy",
+    "content": "Geography matters. Mount Kisco does not have a directly published County Business Patterns observati",
+    "paths": 43,
+    "statusHidden": true,
+    "dashboardHidden": false,
+    "bodyScrollWidth": 390,
+    "errors": []
+  },
+  "screenshots": [
+    "/home/abuck/.openclaw/workspace/dev/wcp-dashboard/artifacts/verification/final-populated-desktop.png",
+    "/home/abuck/.openclaw/workspace/dev/wcp-dashboard/artifacts/verification/final-populated-mobile.png"
+  ]
+}
