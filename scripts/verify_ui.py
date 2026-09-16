@@ -168,10 +168,13 @@ class Chrome:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--port", type=int, default=9010)
+    parser.add_argument("--base", default=None,
+                        help="Full base URL to verify (e.g. a GitHub Pages site). "
+                             "Overrides --port.")
     parser.add_argument("--profiles", default="westchester-county,yonkers,ardsley")
     args = parser.parse_args()
 
-    base = f"http://localhost:{args.port}/"
+    base = args.base.rstrip("/") + "/" if args.base else f"http://localhost:{args.port}/"
     port = free_port()
     chrome = Chrome(port)
     failures: list[str] = []
