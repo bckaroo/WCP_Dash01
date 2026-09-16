@@ -7,3 +7,8 @@ __pycache__/
 !.env.PORT
 server.log
 server.pid
+
+# Collector download caches. These are large and fully regenerable by
+# scripts/run_collectors.sh, so they do not belong in version control.
+# The extracted JSON outputs alongside them ARE committed.
+data/gtfs/*.zip

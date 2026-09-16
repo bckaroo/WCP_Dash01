@@ -291,14 +291,14 @@
       {
         "id": "GR-05",
         "title": "Housing sales and values",
-        "status": "located—not integrated",
-        "note": "NYS ORPTS RP-5217 sales exports are located; a repeatable municipal ingest is not yet built."
+        "status": "partially implemented",
+        "note": "Municipal assessed full-market-value totals from the 2025 ORPTS assessment roll are integrated; recorded sale prices and RP-5217 transfer detail are not."
       },
       {
         "id": "GR-06",
         "title": "Condominium/cooperative inventory",
-        "status": "external data gap",
-        "note": "No complete public feed; County compilation is required."
+        "status": "partially implemented",
+        "note": "2025 NYS ORPTS assessment-roll parcel counts by municipality are integrated. ORPTS publishes no separate condominium class, so condo and co-op units fall within RPS class 411 (Apartments) and are reported as that broader apartment universe."
       },
       {
         "id": "GR-07",
@@ -309,8 +309,8 @@
       {
         "id": "GR-08",
         "title": "Employment and unemployment",
-        "status": "located—not integrated",
-        "note": "NYSDOL LAUS is located; QCEW access and geography method remain unresolved."
+        "status": "partially implemented",
+        "note": "BLS QCEW is integrated for Westchester County: total covered employment, ownership split, and 20 NAICS private sectors. QCEW publishes at county granularity only; LAUS unemployment is not integrated."
       },
       {
         "id": "GR-09",
@@ -334,7 +334,7 @@
         "id": "GR-12",
         "title": "Transportation infrastructure and service",
         "status": "partially implemented",
-        "note": "Resident commute mode is implemented; GTFS frequency and network accessibility remain future integrations."
+        "note": "Resident commute mode and MTA Metro-North GTFS scheduled weekday station frequency are integrated by municipality; road network accessibility and traffic conditions are not."
       },
       {
         "id": "GR-13",
@@ -352,7 +352,7 @@
         "id": "GR-15",
         "title": "Land use and development pattern",
         "status": "partially implemented",
-        "note": "2025 assessment-parcel acreage by ORPTS primary class is integrated; zoning is not."
+        "note": "2025 County assessment-parcel acreage and NYS ORPTS municipal parcel counts by broad use class are integrated; zoning and land cover are not."
       },
       {
         "id": "GR-16",
@@ -363,10 +363,11 @@
     ],
     "known_gaps": [
       "Municipal building-permit detail is not public in one countywide source.",
-      "Condominium/cooperative inventory lacks a complete public feed.",
-      "Major-employer establishment employment requires a curated County source; QCEW microdata are confidential.",
+      "No public ORPTS or County feed separates condominium and cooperative units from the broader RPS class 411 apartment universe.",
+      "Major-employer establishment employment requires a curated County source; QCEW publishes at county granularity and establishment-level microdata are confidential.",
       "CDBG-funded project locations lack a verified public countywide spatial layer.",
-      "This prototype does not yet integrate GTFS service frequency, school enrollment, ORPTS sales, or historical boundary-normalized trends from GR-04/05/12/14/16."
+      "This prototype does not yet integrate school enrollment, recorded property sales, or historical boundary-normalized trends from GR-04/05/14/16.",
+      "Westchester County GIS parcel land-use aggregates and the NYS ORPTS assessment roll are independent sources at different granularities; their municipal parcel counts are not expected to reconcile exactly."
     ]
   },
   "profiles": [

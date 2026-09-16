@@ -1,0 +1,598 @@
+{
+  "source": "U.S. Bureau of Labor Statistics, Quarterly Census of Employment and Wages (QCEW)",
+  "source_url": "https://data.bls.gov/cew/data/api/2024/1/area/36119.csv",
+  "area_fips": "36119",
+  "area_name": "Westchester County, New York",
+  "latest_period": "2024Q1",
+  "latest_total_covered": {
+    "establishments": 37418,
+    "employment": 425967,
+    "total_qtrly_wages_usd": 11211471444,
+    "avg_weekly_wage_usd": 2041
+  },
+  "latest_ownership": {
+    "Federal government": {
+      "establishments": 106,
+      "employment": 4052,
+      "total_qtrly_wages_usd": 92857940,
+      "avg_weekly_wage_usd": 1770
+    },
+    "State government": {
+      "establishments": 197,
+      "employment": 6673,
+      "total_qtrly_wages_usd": 226491411,
+      "avg_weekly_wage_usd": 2626
+    },
+    "Local government": {
+      "establishments": 307,
+      "employment": 52315,
+      "total_qtrly_wages_usd": 1276920630,
+      "avg_weekly_wage_usd": 1892
+    },
+    "Private": {
+      "establishments": 36808,
+      "employment": 362958,
+      "total_qtrly_wages_usd": 9615201463,
+      "avg_weekly_wage_usd": 2055
+    }
+  },
+  "latest_industries": [
+    {
+      "naics": "62",
+      "label": "Health care & social assistance",
+      "establishments": 3423,
+      "employment": 78579,
+      "avg_weekly_wage_usd": 1544,
+      "suppressed": false
+    },
+    {
+      "naics": "44-45",
+      "label": "Retail trade",
+      "establishments": 3261,
+      "employment": 46347,
+      "avg_weekly_wage_usd": 963,
+      "suppressed": false
+    },
+    {
+      "naics": "54",
+      "label": "Professional, scientific & technical services",
+      "establishments": 4512,
+      "employment": 30656,
+      "avg_weekly_wage_usd": 4454,
+      "suppressed": false
+    },
+    {
+      "naics": "72",
+      "label": "Accommodation & food services",
+      "establishments": 2544,
+      "employment": 29080,
+      "avg_weekly_wage_usd": 690,
+      "suppressed": false
+    },
+    {
+      "naics": "23",
+      "label": "Construction",
+      "establishments": 3870,
+      "employment": 27230,
+      "avg_weekly_wage_usd": 1646,
+      "suppressed": false
+    },
+    {
+      "naics": "56",
+      "label": "Administrative & support, waste management",
+      "establishments": 2473,
+      "employment": 21915,
+      "avg_weekly_wage_usd": 1193,
+      "suppressed": false
+    },
+    {
+      "naics": "81",
+      "label": "Other services (except public administration)",
+      "establishments": 4817,
+      "employment": 19530,
+      "avg_weekly_wage_usd": 966,
+      "suppressed": false
+    },
+    {
+      "naics": "61",
+      "label": "Educational services",
+      "establishments": 663,
+      "employment": 17099,
+      "avg_weekly_wage_usd": 1163,
+      "suppressed": false
+    },
+    {
+      "naics": "52",
+      "label": "Finance & insurance",
+      "establishments": 1700,
+      "employment": 16911,
+      "avg_weekly_wage_usd": 7130,
+      "suppressed": false
+    },
+    {
+      "naics": "48-49",
+      "label": "Transportation & warehousing",
+      "establishments": 561,
+      "employment": 15493,
+      "avg_weekly_wage_usd": 1280,
+      "suppressed": false
+    },
+    {
+      "naics": "42",
+      "label": "Wholesale trade",
+      "establishments": 1274,
+      "employment": 11120,
+      "avg_weekly_wage_usd": 2359,
+      "suppressed": false
+    },
+    {
+      "naics": "31-33",
+      "label": "Manufacturing",
+      "establishments": 599,
+      "employment": 10859,
+      "avg_weekly_wage_usd": 2860,
+      "suppressed": false
+    },
+    {
+      "naics": "53",
+      "label": "Real estate, rental & leasing",
+      "establishments": 2333,
+      "employment": 10163,
+      "avg_weekly_wage_usd": 1766,
+      "suppressed": false
+    },
+    {
+      "naics": "55",
+      "label": "Management of companies & enterprises",
+      "establishments": 288,
+      "employment": 9317,
+      "avg_weekly_wage_usd": 6388,
+      "suppressed": false
+    },
+    {
+      "naics": "71",
+      "label": "Arts, entertainment & recreation",
+      "establishments": 756,
+      "employment": 9066,
+      "avg_weekly_wage_usd": 1058,
+      "suppressed": false
+    },
+    {
+      "naics": "51",
+      "label": "Information",
+      "establishments": 707,
+      "employment": 6254,
+      "avg_weekly_wage_usd": 3076,
+      "suppressed": false
+    },
+    {
+      "naics": "99",
+      "label": "Unclassified",
+      "establishments": 2918,
+      "employment": 1911,
+      "avg_weekly_wage_usd": 1277,
+      "suppressed": false
+    },
+    {
+      "naics": "22",
+      "label": "Utilities",
+      "establishments": 23,
+      "employment": 1784,
+      "avg_weekly_wage_usd": 3342,
+      "suppressed": false
+    },
+    {
+      "naics": "11",
+      "label": "Agriculture, forestry, fishing & hunting",
+      "establishments": 80,
+      "employment": 309,
+      "avg_weekly_wage_usd": 1091,
+      "suppressed": false
+    },
+    {
+      "naics": "21",
+      "label": "Mining, quarrying, oil & gas",
+      "establishments": 6,
+      "employment": 15,
+      "avg_weekly_wage_usd": 2910,
+      "suppressed": false
+    }
+  ],
+  "periods": {
+    "2024Q1": {
+      "ownership": {
+        "Federal government": {
+          "establishments": 106,
+          "employment": 4052,
+          "total_qtrly_wages_usd": 92857940,
+          "avg_weekly_wage_usd": 1770
+        },
+        "State government": {
+          "establishments": 197,
+          "employment": 6673,
+          "total_qtrly_wages_usd": 226491411,
+          "avg_weekly_wage_usd": 2626
+        },
+        "Local government": {
+          "establishments": 307,
+          "employment": 52315,
+          "total_qtrly_wages_usd": 1276920630,
+          "avg_weekly_wage_usd": 1892
+        },
+        "Private": {
+          "establishments": 36808,
+          "employment": 362958,
+          "total_qtrly_wages_usd": 9615201463,
+          "avg_weekly_wage_usd": 2055
+        }
+      },
+      "industries": [
+        {
+          "naics": "62",
+          "label": "Health care & social assistance",
+          "establishments": 3423,
+          "employment": 78579,
+          "avg_weekly_wage_usd": 1544,
+          "suppressed": false
+        },
+        {
+          "naics": "44-45",
+          "label": "Retail trade",
+          "establishments": 3261,
+          "employment": 46347,
+          "avg_weekly_wage_usd": 963,
+          "suppressed": false
+        },
+        {
+          "naics": "54",
+          "label": "Professional, scientific & technical services",
+          "establishments": 4512,
+          "employment": 30656,
+          "avg_weekly_wage_usd": 4454,
+          "suppressed": false
+        },
+        {
+          "naics": "72",
+          "label": "Accommodation & food services",
+          "establishments": 2544,
+          "employment": 29080,
+          "avg_weekly_wage_usd": 690,
+          "suppressed": false
+        },
+        {
+          "naics": "23",
+          "label": "Construction",
+          "establishments": 3870,
+          "employment": 27230,
+          "avg_weekly_wage_usd": 1646,
+          "suppressed": false
+        },
+        {
+          "naics": "56",
+          "label": "Administrative & support, waste management",
+          "establishments": 2473,
+          "employment": 21915,
+          "avg_weekly_wage_usd": 1193,
+          "suppressed": false
+        },
+        {
+          "naics": "81",
+          "label": "Other services (except public administration)",
+          "establishments": 4817,
+          "employment": 19530,
+          "avg_weekly_wage_usd": 966,
+          "suppressed": false
+        },
+        {
+          "naics": "61",
+          "label": "Educational services",
+          "establishments": 663,
+          "employment": 17099,
+          "avg_weekly_wage_usd": 1163,
+          "suppressed": false
+        },
+        {
+          "naics": "52",
+          "label": "Finance & insurance",
+          "establishments": 1700,
+          "employment": 16911,
+          "avg_weekly_wage_usd": 7130,
+          "suppressed": false
+        },
+        {
+          "naics": "48-49",
+          "label": "Transportation & warehousing",
+          "establishments": 561,
+          "employment": 15493,
+          "avg_weekly_wage_usd": 1280,
+          "suppressed": false
+        },
+        {
+          "naics": "42",
+          "label": "Wholesale trade",
+          "establishments": 1274,
+          "employment": 11120,
+          "avg_weekly_wage_usd": 2359,
+          "suppressed": false
+        },
+        {
+          "naics": "31-33",
+          "label": "Manufacturing",
+          "establishments": 599,
+          "employment": 10859,
+          "avg_weekly_wage_usd": 2860,
+          "suppressed": false
+        },
+        {
+          "naics": "53",
+          "label": "Real estate, rental & leasing",
+          "establishments": 2333,
+          "employment": 10163,
+          "avg_weekly_wage_usd": 1766,
+          "suppressed": false
+        },
+        {
+          "naics": "55",
+          "label": "Management of companies & enterprises",
+          "establishments": 288,
+          "employment": 9317,
+          "avg_weekly_wage_usd": 6388,
+          "suppressed": false
+        },
+        {
+          "naics": "71",
+          "label": "Arts, entertainment & recreation",
+          "establishments": 756,
+          "employment": 9066,
+          "avg_weekly_wage_usd": 1058,
+          "suppressed": false
+        },
+        {
+          "naics": "51",
+          "label": "Information",
+          "establishments": 707,
+          "employment": 6254,
+          "avg_weekly_wage_usd": 3076,
+          "suppressed": false
+        },
+        {
+          "naics": "99",
+          "label": "Unclassified",
+          "establishments": 2918,
+          "employment": 1911,
+          "avg_weekly_wage_usd": 1277,
+          "suppressed": false
+        },
+        {
+          "naics": "22",
+          "label": "Utilities",
+          "establishments": 23,
+          "employment": 1784,
+          "avg_weekly_wage_usd": 3342,
+          "suppressed": false
+        },
+        {
+          "naics": "11",
+          "label": "Agriculture, forestry, fishing & hunting",
+          "establishments": 80,
+          "employment": 309,
+          "avg_weekly_wage_usd": 1091,
+          "suppressed": false
+        },
+        {
+          "naics": "21",
+          "label": "Mining, quarrying, oil & gas",
+          "establishments": 6,
+          "employment": 15,
+          "avg_weekly_wage_usd": 2910,
+          "suppressed": false
+        }
+      ],
+      "total_covered": {
+        "establishments": 37418,
+        "employment": 425967,
+        "total_qtrly_wages_usd": 11211471444,
+        "avg_weekly_wage_usd": 2041
+      },
+      "rows_in_file": 1888
+    },
+    "2023Q1": {
+      "ownership": {
+        "Federal government": {
+          "establishments": 103,
+          "employment": 4074,
+          "total_qtrly_wages_usd": 90405662,
+          "avg_weekly_wage_usd": 1713
+        },
+        "State government": {
+          "establishments": 199,
+          "employment": 6560,
+          "total_qtrly_wages_usd": 220786763,
+          "avg_weekly_wage_usd": 2598
+        },
+        "Local government": {
+          "establishments": 307,
+          "employment": 51522,
+          "total_qtrly_wages_usd": 1243053137,
+          "avg_weekly_wage_usd": 1868
+        },
+        "Private": {
+          "establishments": 36705,
+          "employment": 355430,
+          "total_qtrly_wages_usd": 9029968187,
+          "avg_weekly_wage_usd": 1967
+        }
+      },
+      "industries": [
+        {
+          "naics": "62",
+          "label": "Health care & social assistance",
+          "establishments": 3359,
+          "employment": 75636,
+          "avg_weekly_wage_usd": 1513,
+          "suppressed": false
+        },
+        {
+          "naics": "44-45",
+          "label": "Retail trade",
+          "establishments": 3326,
+          "employment": 46567,
+          "avg_weekly_wage_usd": 944,
+          "suppressed": false
+        },
+        {
+          "naics": "54",
+          "label": "Professional, scientific & technical services",
+          "establishments": 4382,
+          "employment": 30349,
+          "avg_weekly_wage_usd": 3764,
+          "suppressed": false
+        },
+        {
+          "naics": "72",
+          "label": "Accommodation & food services",
+          "establishments": 2544,
+          "employment": 28337,
+          "avg_weekly_wage_usd": 674,
+          "suppressed": false
+        },
+        {
+          "naics": "23",
+          "label": "Construction",
+          "establishments": 3934,
+          "employment": 28021,
+          "avg_weekly_wage_usd": 1606,
+          "suppressed": false
+        },
+        {
+          "naics": "56",
+          "label": "Administrative & support, waste management",
+          "establishments": 2492,
+          "employment": 21701,
+          "avg_weekly_wage_usd": 1191,
+          "suppressed": false
+        },
+        {
+          "naics": "81",
+          "label": "Other services (except public administration)",
+          "establishments": 4878,
+          "employment": 19307,
+          "avg_weekly_wage_usd": 944,
+          "suppressed": false
+        },
+        {
+          "naics": "61",
+          "label": "Educational services",
+          "establishments": 657,
+          "employment": 16948,
+          "avg_weekly_wage_usd": 1130,
+          "suppressed": false
+        },
+        {
+          "naics": "52",
+          "label": "Finance & insurance",
+          "establishments": 1669,
+          "employment": 16885,
+          "avg_weekly_wage_usd": 6426,
+          "suppressed": false
+        },
+        {
+          "naics": "42",
+          "label": "Wholesale trade",
+          "establishments": 1286,
+          "employment": 11832,
+          "avg_weekly_wage_usd": 2312,
+          "suppressed": false
+        },
+        {
+          "naics": "31-33",
+          "label": "Manufacturing",
+          "establishments": 602,
+          "employment": 11676,
+          "avg_weekly_wage_usd": 2768,
+          "suppressed": false
+        },
+        {
+          "naics": "48-49",
+          "label": "Transportation & warehousing",
+          "establishments": 566,
+          "employment": 11156,
+          "avg_weekly_wage_usd": 1609,
+          "suppressed": false
+        },
+        {
+          "naics": "53",
+          "label": "Real estate, rental & leasing",
+          "establishments": 2310,
+          "employment": 9690,
+          "avg_weekly_wage_usd": 1792,
+          "suppressed": false
+        },
+        {
+          "naics": "55",
+          "label": "Management of companies & enterprises",
+          "establishments": 284,
+          "employment": 9017,
+          "avg_weekly_wage_usd": 6698,
+          "suppressed": false
+        },
+        {
+          "naics": "71",
+          "label": "Arts, entertainment & recreation",
+          "establishments": 728,
+          "employment": 8510,
+          "avg_weekly_wage_usd": 1020,
+          "suppressed": false
+        },
+        {
+          "naics": "51",
+          "label": "Information",
+          "establishments": 678,
+          "employment": 7095,
+          "avg_weekly_wage_usd": 2770,
+          "suppressed": false
+        },
+        {
+          "naics": "99",
+          "label": "Unclassified",
+          "establishments": 2900,
+          "employment": 1972,
+          "avg_weekly_wage_usd": 1174,
+          "suppressed": false
+        },
+        {
+          "naics": "22",
+          "label": "Utilities",
+          "establishments": 24,
+          "employment": 1767,
+          "avg_weekly_wage_usd": 3144,
+          "suppressed": false
+        },
+        {
+          "naics": "11",
+          "label": "Agriculture, forestry, fishing & hunting",
+          "establishments": 78,
+          "employment": 292,
+          "avg_weekly_wage_usd": 1076,
+          "suppressed": false
+        },
+        {
+          "naics": "21",
+          "label": "Mining, quarrying, oil & gas",
+          "establishments": 8,
+          "employment": 17,
+          "avg_weekly_wage_usd": 2368,
+          "suppressed": false
+        }
+      ],
+      "total_covered": {
+        "establishments": 37314,
+        "employment": 417550,
+        "total_qtrly_wages_usd": 10584213749,
+        "avg_weekly_wage_usd": 1962
+      },
+      "rows_in_file": 1883
+    }
+  },
+  "granularity_note": "QCEW publishes at county granularity. These figures describe Westchester County as a whole and cannot be decomposed into individual municipalities from this source."
+}

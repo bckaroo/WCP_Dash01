@@ -1,0 +1,274 @@
+{
+  "source": "https://rrgtfsfeeds.s3.amazonaws.com/gtfsmnr.zip",
+  "source_name": "MTA Metro-North Railroad GTFS",
+  "service_date_used": "2026-09-15",
+  "active_service_ids": 15,
+  "active_trips": 701,
+  "total_stations_in_feed": 114,
+  "stations_matched_to_municipality": 43,
+  "stations_outside_westchester": 71,
+  "municipalities_with_rail_service": 31,
+  "municipalities": {
+    "White Plains": {
+      "profile_id": "white-plains",
+      "stations": 2,
+      "weekday_scheduled_calls": 335,
+      "station_names": [
+        "White Plains",
+        "North White Plains"
+      ]
+    },
+    "Yonkers": {
+      "profile_id": "yonkers",
+      "stations": 4,
+      "weekday_scheduled_calls": 278,
+      "station_names": [
+        "Ludlow",
+        "Yonkers",
+        "Glenwood",
+        "Greystone"
+      ]
+    },
+    "Mount Vernon": {
+      "profile_id": "mount-vernon",
+      "stations": 3,
+      "weekday_scheduled_calls": 267,
+      "station_names": [
+        "Mt Vernon West",
+        "Fleetwood",
+        "Mt Vernon East"
+      ]
+    },
+    "Tuckahoe": {
+      "profile_id": "tuckahoe",
+      "stations": 2,
+      "weekday_scheduled_calls": 174,
+      "station_names": [
+        "Tuckahoe",
+        "Crestwood"
+      ]
+    },
+    "Irvington": {
+      "profile_id": "irvington",
+      "stations": 2,
+      "weekday_scheduled_calls": 149,
+      "station_names": [
+        "Ardsley-on-Hudson",
+        "Irvington"
+      ]
+    },
+    "North Salem": {
+      "profile_id": "north-salem",
+      "stations": 2,
+      "weekday_scheduled_calls": 142,
+      "station_names": [
+        "Purdy's",
+        "Croton Falls"
+      ]
+    },
+    "Croton-on-Hudson": {
+      "profile_id": "croton-on-hudson",
+      "stations": 1,
+      "weekday_scheduled_calls": 141,
+      "station_names": [
+        "Croton-Harmon"
+      ]
+    },
+    "Mount Pleasant": {
+      "profile_id": "mount-pleasant",
+      "stations": 3,
+      "weekday_scheduled_calls": 134,
+      "station_names": [
+        "Valhalla",
+        "Mt Pleasant",
+        "Hawthorne"
+      ]
+    },
+    "Bedford": {
+      "profile_id": "bedford",
+      "stations": 2,
+      "weekday_scheduled_calls": 134,
+      "station_names": [
+        "Bedford Hills",
+        "Katonah"
+      ]
+    },
+    "Tarrytown": {
+      "profile_id": "tarrytown",
+      "stations": 1,
+      "weekday_scheduled_calls": 111,
+      "station_names": [
+        "Tarrytown"
+      ]
+    },
+    "Ossining Village": {
+      "profile_id": "ossining-village",
+      "stations": 1,
+      "weekday_scheduled_calls": 109,
+      "station_names": [
+        "Ossining"
+      ]
+    },
+    "Rye City": {
+      "profile_id": "rye-city",
+      "stations": 1,
+      "weekday_scheduled_calls": 98,
+      "station_names": [
+        "Rye"
+      ]
+    },
+    "Scarsdale": {
+      "profile_id": "scarsdale",
+      "stations": 1,
+      "weekday_scheduled_calls": 97,
+      "station_names": [
+        "Scarsdale"
+      ]
+    },
+    "Greenburgh": {
+      "profile_id": "greenburgh",
+      "stations": 1,
+      "weekday_scheduled_calls": 97,
+      "station_names": [
+        "Hartsdale"
+      ]
+    },
+    "New Rochelle": {
+      "profile_id": "new-rochelle",
+      "stations": 1,
+      "weekday_scheduled_calls": 97,
+      "station_names": [
+        "New Rochelle"
+      ]
+    },
+    "Port Chester": {
+      "profile_id": "port-chester",
+      "stations": 1,
+      "weekday_scheduled_calls": 97,
+      "station_names": [
+        "Port Chester"
+      ]
+    },
+    "Harrison": {
+      "profile_id": "harrison",
+      "stations": 1,
+      "weekday_scheduled_calls": 96,
+      "station_names": [
+        "Harrison"
+      ]
+    },
+    "Larchmont": {
+      "profile_id": "larchmont",
+      "stations": 1,
+      "weekday_scheduled_calls": 89,
+      "station_names": [
+        "Larchmont"
+      ]
+    },
+    "Mamaroneck Village": {
+      "profile_id": "mamaroneck-village",
+      "stations": 1,
+      "weekday_scheduled_calls": 89,
+      "station_names": [
+        "Mamaroneck"
+      ]
+    },
+    "Pelham": {
+      "profile_id": "pelham",
+      "stations": 1,
+      "weekday_scheduled_calls": 86,
+      "station_names": [
+        "Pelham"
+      ]
+    },
+    "Bronxville": {
+      "profile_id": "bronxville",
+      "stations": 1,
+      "weekday_scheduled_calls": 85,
+      "station_names": [
+        "Bronxville"
+      ]
+    },
+    "Mount Kisco": {
+      "profile_id": "mount-kisco",
+      "stations": 1,
+      "weekday_scheduled_calls": 81,
+      "station_names": [
+        "Mt Kisco"
+      ]
+    },
+    "Hastings-on-Hudson": {
+      "profile_id": "hastings-on-hudson",
+      "stations": 1,
+      "weekday_scheduled_calls": 80,
+      "station_names": [
+        "Hastings-on-Hudson"
+      ]
+    },
+    "Dobbs Ferry": {
+      "profile_id": "dobbs-ferry",
+      "stations": 1,
+      "weekday_scheduled_calls": 80,
+      "station_names": [
+        "Dobbs Ferry"
+      ]
+    },
+    "New Castle": {
+      "profile_id": "new-castle",
+      "stations": 1,
+      "weekday_scheduled_calls": 80,
+      "station_names": [
+        "Chappaqua"
+      ]
+    },
+    "Briarcliff Manor": {
+      "profile_id": "briarcliff-manor",
+      "stations": 1,
+      "weekday_scheduled_calls": 77,
+      "station_names": [
+        "Scarborough"
+      ]
+    },
+    "Lewisboro": {
+      "profile_id": "lewisboro",
+      "stations": 1,
+      "weekday_scheduled_calls": 77,
+      "station_names": [
+        "Goldens Bridge"
+      ]
+    },
+    "Sleepy Hollow": {
+      "profile_id": "sleepy-hollow",
+      "stations": 1,
+      "weekday_scheduled_calls": 72,
+      "station_names": [
+        "Philipse Manor"
+      ]
+    },
+    "Pleasantville": {
+      "profile_id": "pleasantville",
+      "stations": 1,
+      "weekday_scheduled_calls": 69,
+      "station_names": [
+        "Pleasantville"
+      ]
+    },
+    "Peekskill": {
+      "profile_id": "peekskill",
+      "stations": 1,
+      "weekday_scheduled_calls": 58,
+      "station_names": [
+        "Peekskill"
+      ]
+    },
+    "Cortlandt": {
+      "profile_id": "cortlandt",
+      "stations": 1,
+      "weekday_scheduled_calls": 56,
+      "station_names": [
+        "Cortlandt"
+      ]
+    }
+  },
+  "method_note": "weekday_scheduled_calls counts scheduled station calls on the representative weekday. Stations are assigned to municipalities by point-in-polygon against County municipal boundaries; stations outside Westchester (e.g. NYC, CT) are excluded from municipal totals."
+}

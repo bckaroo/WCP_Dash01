@@ -185,6 +185,11 @@ footer a { color: #fff; text-underline-offset: 3px; }
   .download-strip { align-items: flex-start; flex-direction: column; }
   .download-actions { justify-content: flex-start; }
   footer { flex-direction: column; }
+  /* Nine topics do not fit a narrow viewport on one line. Wrapping keeps every
+     tab visible; the default overflow-x:auto left five of them off-screen with
+     no affordance that the bar scrolled. */
+  .theme-tabs { flex-wrap: wrap; overflow-x: visible; row-gap: 2px; }
+  .theme-tabs button { flex: 1 1 auto; text-align: center; }
 }
 @media print {
   .masthead { background: #fff; color: var(--ink); border-bottom: 2px solid var(--ink); }

@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const state = { data: null, geo: null, aggregateGeo: null, currentId: 'westchester-county', theme: 'population' };
+  const state = { data: null, geo: null, aggregateGeo: null, employment: null, transit: null, property: null, currentId: 'westchester-county', theme: 'population' };
   const $ = (selector) => document.querySelector(selector);
   const $$ = (selector) => [...document.querySelectorAll(selector)];
 
@@ -250,8 +250,208 @@
     </div>`;
   }
 
+  // ---------------------------------------------------------------------
+  // External datasets integrated from verified public sources.
+  // Each is loaded independently and tolerantly: a missing collector output
+  // degrades one tab with a clear message; it never breaks the dashboard.
+  // ---------------------------------------------------------------------
+
+  function unavailable(title, detail) {
+    return `<div class="section-grid"><aside class="note full"><strong>${escapeHtml(title)} is not loaded.</strong> ${escapeHtml(detail)}</aside></div>`;
+  }
+
+  function sourceNote(label, url, detail) {
+    if (!url) return `<p class="compare">${escapeHtml(detail)}</p>`;
+    return `<p class="compare">${escapeHtml(detail)} <a href="${escapeHtml(url)}" target="_blank" rel="noreferrer">${escapeHtml(label)}</a></p>`;
+  }
+
+  // Bars for administrative counts rather than survey estimates. The existing
+  // barRows() helper hardcodes a GIS uncertainty caption, which would be wrong
+  // for BLS / transit / assessment-roll figures, so provenance is passed in.
+  function countRows(items, max, note, format = number) {
+    return `<div class="bar-list" role="list">${items.map((item) => {
+      const value = item.value;
+      const width = value == null ? 0 : Math.max(0, Math.min(100, value / max * 100));
+      const display = value == null ? 'N/A' : format.format(value);
+      return `<div class="bar-row" role="listitem" aria-label="${escapeHtml(`${item.label}: ${display}. ${note}`)}"><span>${escapeHtml(item.label)}</span><span class="bar-track" aria-hidden="true"><span class="bar-fill" style="width:${width}%"></span></span><strong class="bar-value">${display}</strong><span class="bar-moe">${escapeHtml(note)}</span></div>`;
+    }).join('')}</div>`;
+  }
+
+  function renderEmployment(profile) {
+    const qcew = state.employment;
+    if (!qcew) return unavailable('BLS QCEW employment', 'Run scripts/run_collectors.sh to build data/employment/qcew_westchester.json.');
+    const total = qcew.latest_total_covered;
+    const ownership = Object.entries(qcew.latest_ownership);
+    const industries = qcew.latest_industries.slice(0, 14);
+    const maxIndustry = Math.max(...industries.map((item) => item.employment), 1);
+    const contextNote = profile.id === 'westchester-county'
+      ? 'These figures describe Westchester County as a whole.'
+      : `QCEW is published at county granularity, so no Westchester municipality has its own QCEW record. County figures are shown as context and are not allocated to ${profile.name}.`;
+    return `<div class="section-grid">
+      <aside class="note full"><strong>County geography.</strong> ${escapeHtml(contextNote)}</aside>
+      <article class="data-card card full">
+        <h3>Covered employment and wages</h3>
+        <p>U.S. Bureau of Labor Statistics Quarterly Census of Employment and Wages, ${escapeHtml(qcew.latest_period)}. These are administrative counts drawn from unemployment-insurance filings, not survey estimates, so no margin of error applies.</p>
+        <div class="inline-stats">
+          <div class="inline-stat"><strong>${number.format(total.employment)}</strong><span>Total covered jobs</span></div>
+          <div class="inline-stat"><strong>${number.format(total.establishments)}</strong><span>Reporting establishments</span></div>
+          <div class="inline-stat"><strong>${currency.format(total.avg_weekly_wage_usd)}</strong><span>Average weekly wage</span></div>
+        </div>
+        ${sourceNote('BLS QCEW source', qcew.source_url, qcew.granularity_note)}
+      </article>
+      <article class="data-card card">
+        <h3>Ownership split</h3><p>Jobs and wages by ownership sector in the latest period.</p>
+        <table class="data-table"><caption class="sr-only">Westchester County employment by ownership</caption><thead><tr><th scope="col">Ownership</th><th scope="col">Estab.</th><th scope="col">Jobs</th><th scope="col">Avg weekly wage</th></tr></thead><tbody>${ownership.map(([name, values]) => `<tr><td>${escapeHtml(name)}</td><td>${number.format(values.establishments)}</td><td>${number.format(values.employment)}</td><td>${currency.format(values.avg_weekly_wage_usd)}</td></tr>`).join('')}</tbody></table>
+      </article>
+      <article class="data-card card">
+        <h3>Largest private sectors</h3><p>NAICS 2-digit sectors, private ownership only. Labels are BLS standard sector names.</p>
+        ${countRows(industries.map((item) => ({ label: item.label, value: item.employment })), maxIndustry, 'Administrative count · no sampling MOE')}
+      </article>
+      <aside class="note full"><strong>Not an employer list.</strong> QCEW publishes industry totals, never named employers. Establishment-level figures are confidential under BLS disclosure rules, so this tab cannot identify individual employers or their addresses.</aside>
+    </div>`;
+  }
+
+  function renderTransit(profile) {
+    const gtfs = state.transit;
+    if (!gtfs) return unavailable('Metro-North GTFS service frequency', 'Run scripts/run_collectors.sh to build data/gtfs/mnr_station_frequency.json.');
+    const munis = gtfs.municipalities;
+    const method = `<article class="data-card card full"><h3>Method and limits</h3><p>${escapeHtml(gtfs.method_note)}</p><ul class="source-list"><li>Feed: <a href="${escapeHtml(gtfs.source)}" target="_blank" rel="noreferrer">MTA Metro-North GTFS</a></li><li>Service date analysed: ${escapeHtml(gtfs.service_date_used)}</li><li>Active weekday service IDs: ${number.format(gtfs.active_service_ids)} · active trips: ${number.format(gtfs.active_trips)}</li><li>Stations matched to a Westchester municipality: ${number.format(gtfs.stations_matched_to_municipality)} of ${number.format(gtfs.total_stations_in_feed)} · outside the county (e.g. NYC, Connecticut): ${number.format(gtfs.stations_outside_westchester)}</li></ul></article>`;
+
+    if (profile.id !== 'westchester-county' && !munis[profile.name]) {
+      return `<div class="section-grid">
+        <aside class="note full"><strong>No Metro-North station inside ${escapeHtml(profile.name)}.</strong> The ${escapeHtml(gtfs.service_date_used)} feed contains no stop within this municipality's boundary. This is not a statement about rail access — residents may still reach neighbouring stations, and a stop assigned to one municipality can serve others.</aside>
+        ${method}
+      </div>`;
+    }
+
+    const rows = profile.id === 'westchester-county'
+      ? Object.entries(munis).sort((a, b) => b[1].weekday_scheduled_calls - a[1].weekday_scheduled_calls)
+      : [[profile.name, munis[profile.name]]];
+    const maxCalls = Math.max(...rows.map(([, values]) => values.weekday_scheduled_calls), 1);
+    const totalCalls = Object.values(munis).reduce((sum, values) => sum + values.weekday_scheduled_calls, 0);
+    const totalStations = Object.values(munis).reduce((sum, values) => sum + values.stations, 0);
+    const isCounty = profile.id === 'westchester-county';
+    const stations = rows.flatMap(([name, values]) => values.station_names.map((station) => ({ name, station })));
+
+    return `<div class="section-grid">
+      <aside class="note full"><strong>Scheduled service, not observed ridership.</strong> ${isCounty ? 'Counts cover all Westchester municipalities with Metro-North service.' : `Counts cover stations inside ${escapeHtml(profile.name)} only.`} This measures timetabled station calls on one representative weekday. It is not passenger boardings, and it excludes bus, subway, and Amtrak service.</aside>
+      <article class="data-card card full">
+        <h3>Scheduled weekday station calls</h3><p>Metro-North railroad only. A station call is one scheduled train arrival at that station.</p>
+        <div class="inline-stats">
+          <div class="inline-stat"><strong>${number.format(isCounty ? totalStations : rows[0][1].stations)}</strong><span>Stations in ${isCounty ? 'Westchester' : escapeHtml(profile.name)}</span></div>
+          <div class="inline-stat"><strong>${number.format(isCounty ? rows.length : rows[0][1].weekday_scheduled_calls)}</strong><span>${isCounty ? 'Municipalities with service' : 'Scheduled weekday calls'}</span></div>
+          <div class="inline-stat"><strong>${number.format(isCounty ? totalCalls : rows[0][1].stations)}</strong><span>${isCounty ? 'Total scheduled calls' : 'Stations'}</span></div>
+        </div>
+      </article>
+      <article class="data-card card full">
+        <h3>${isCounty ? 'Service by municipality' : `Stations in ${escapeHtml(profile.name)}`}</h3>
+        <p>${isCounty ? 'All 31 Westchester municipalities with at least one Metro-North station.' : 'Station names as published in the feed.'}</p>
+        ${countRows(rows.map(([name, values]) => ({ label: name, value: values.weekday_scheduled_calls })), maxCalls, 'Scheduled weekday calls · administrative count')}
+      </article>
+      <article class="data-card card full">
+        <h3>Station detail</h3>
+        <table class="data-table"><caption class="sr-only">Metro-North stations and scheduled weekday calls</caption><thead><tr><th scope="col">Municipality</th><th scope="col">Station</th></tr></thead><tbody>${stations.map((row) => `<tr><td>${escapeHtml(row.name)}</td><td>${escapeHtml(row.station)}</td></tr>`).join('')}</tbody></table>
+      </article>
+      ${method}
+    </div>`;
+  }
+
+  // The ORPTS roll reports taxing municipalities (towns and cities), not every
+  // village, so there is no single "Westchester County" row. The County view is
+  // the sum of the municipal records actually present, assembled here.
+  function countyPropertyEntry(munis) {
+    const counts = {};
+    const classes = new Map();
+    let multifamily = 0;
+    for (const entry of Object.values(munis)) {
+      for (const [field, value] of Object.entries(entry.parcel_counts)) {
+        if (typeof value !== 'number') continue;
+        counts[field] = (counts[field] || 0) + value;
+      }
+      for (const item of entry.property_classes) {
+        const prev = classes.get(item.class) || {
+          class: item.class, description: item.description, parcels: 0,
+          total_market_value_usd: 0, is_multifamily: item.is_multifamily,
+        };
+        prev.parcels += item.parcels;
+        prev.total_market_value_usd += item.total_market_value_usd || 0;
+        classes.set(item.class, prev);
+      }
+      multifamily += entry.multifamily_parcels || 0;
+    }
+    const total = counts.total_parcel_count || 0;
+    return {
+      parcel_counts: counts,
+      property_classes: [...classes.values()].sort((a, b) => b.parcels - a.parcels),
+      multifamily_parcels: multifamily,
+      multifamily_share_pct: total ? Number((100 * multifamily / total).toFixed(2)) : null,
+      municipal_records_summed: Object.keys(munis).length,
+    };
+  }
+
+  function renderProperty(profile) {
+    const prop = state.property;
+    if (!prop) return unavailable('NYS ORPTS property inventory', 'Run scripts/run_collectors.sh to build data/parcels/nyopendata_property_inventory.json.');
+    const munis = prop.municipalities;
+    const isCounty = profile.id === 'westchester-county';
+    const entry = isCounty ? countyPropertyEntry(munis) : munis[profile.name];
+
+    if (!entry) {
+      return `<div class="section-grid">
+        <aside class="note full"><strong>No ORPTS assessment-roll record matched ${escapeHtml(profile.name)}.</strong> The ${escapeHtml(prop.roll_year)} roll carries ${number.format(prop.municipalities_in_source)} Westchester municipal records, which cover the county's towns and cities. Villages are assessed within their town and do not appear as separate roll entries; a coterminous town-village is reported under a single name.</aside>
+        ${propertyMethod(prop)}
+      </div>`;
+    }
+
+    const counts = entry.parcel_counts;
+    const classes = entry.property_classes.slice(0, 12);
+    const maxClass = Math.max(...classes.map((item) => item.parcels), 1);
+    const broadUse = [
+      ['Agricultural', counts.broad_use_100_agricultural_property_count],
+      ['Residential', counts.broad_use_200_residential_property_count],
+      ['Vacant land', counts.broad_use_300_vacant_land_property_count],
+      ['Commercial', counts.broad_use_400_commercial_property_count],
+      ['Recreation', counts.broad_use_500_recreation_property_count],
+      ['Community service', counts.broad_use_600_community_service_property_count],
+      ['Industrial', counts.broad_use_700_industrial_property_count],
+      ['Public service', counts.broad_use_800_public_service_property_count],
+      ['Forest & conservation', counts.broad_use_900_forest_and_conservation_property_count],
+    ].filter(([, value]) => value != null);
+    const maxUse = Math.max(...broadUse.map(([, value]) => value), 1);
+    return `<div class="section-grid">
+      <aside class="note full"><strong>Assessment roll, not a housing survey.</strong> Figures are parcel counts from the ${escapeHtml(prop.roll_year)} NYS ORPTS roll for ${isCounty ? 'Westchester municipalities' : escapeHtml(profile.name)}. A parcel is a taxing unit, not a dwelling: one parcel may contain many units, and condominium units are frequently assessed as a single parcel. This does not count housing units.</aside>
+      <article class="data-card card full">
+        <h3>Parcels by broad use class</h3><p>First digit of the NYS property-class code. Every parcel has exactly one primary class, so these categories sum to the municipal total.</p>
+        ${countRows(broadUse.map(([label, value]) => ({ label, value })), maxUse, 'Parcel count · administrative record')}
+        <div class="inline-stats" style="margin-top:1rem">
+          <div class="inline-stat"><strong>${number.format(counts.total_parcel_count)}</strong><span>Total parcels</span></div>
+          <div class="inline-stat"><strong>${number.format(entry.multifamily_parcels)}</strong><span>Apartment-class parcels</span></div>
+          <div class="inline-stat"><strong>${entry.multifamily_share_pct == null ? 'N/A' : `${oneDecimal.format(entry.multifamily_share_pct)}%`}</strong><span>Apartment share of parcels</span></div>
+        </div>
+      </article>
+      <article class="data-card card full">
+        <h3>Most common property classes</h3><p>Top ${classes.length} classes by parcel count. Class 411 (Apartments) is the class under which condominium and cooperative units are reported.</p>
+        ${countRows(classes.map((item) => ({ label: `${item.class} · ${item.description}`, value: item.parcels })), maxClass, 'Parcel count · administrative record')}
+      </article>
+      <article class="data-card card full">
+        <h3>Class detail with assessed market value</h3>
+        <table class="data-table"><caption class="sr-only">Property classes, parcel counts, and total assessed market value</caption><thead><tr><th scope="col">Class</th><th scope="col">Description</th><th scope="col">Parcels</th><th scope="col">Assessed market value</th></tr></thead><tbody>${classes.map((item) => `<tr><td>${escapeHtml(item.class)}</td><td>${escapeHtml(item.description)}</td><td>${number.format(item.parcels)}</td><td>${item.total_market_value_usd == null ? 'Not available' : currency.format(item.total_market_value_usd)}</td></tr>`).join('')}</tbody></table>
+      </article>
+      ${propertyMethod(prop)}
+    </div>`;
+  }
+
+  function propertyMethod(prop) {
+    return `<article class="data-card card full">
+      <h3>Method and limits</h3>
+      <p>${escapeHtml(prop.multifamily_class_note)}</p>
+      <ul class="source-list">${prop.sources.map((source) => `<li><a href="${escapeHtml(source.url)}" target="_blank" rel="noreferrer">${escapeHtml(source.name)}</a> — ${escapeHtml(source.publisher)}, dataset <code>${escapeHtml(source.dataset_id)}</code></li>`).join('')}</ul>
+      <p class="compare">Counts cover ${number.format(prop.municipalities_in_source)} municipalities in the ${escapeHtml(prop.county)} roll. Values are as-reported; this prototype does not re-assess, equalize, or rank municipalities by them.</p>
+    </article>`;
+  }
+
   function renderTheme(profile) {
-    const renderers = { population: renderPopulation, housing: renderHousing, commute: renderCommute, 'land-use': renderLandUse, economy: renderEconomy, methods: renderMethods };
+    const renderers = { population: renderPopulation, housing: renderHousing, commute: renderCommute, 'land-use': renderLandUse, economy: renderEconomy, employment: renderEmployment, transit: renderTransit, property: renderProperty, methods: renderMethods };
     $('#themeContent').innerHTML = renderers[state.theme](profile);
     $$('#themeTabs button').forEach((button) => {
       const selected = button.dataset.theme === state.theme;
@@ -345,10 +545,24 @@
 
   function route() {
     const match = window.location.hash.match(/^#\/profile\/([a-z0-9-]+)(?:\/theme\/([a-z-]+))?$/);
-    const validThemes = new Set(['population', 'housing', 'commute', 'land-use', 'economy', 'methods']);
+    const validThemes = new Set(['population', 'housing', 'commute', 'land-use', 'economy', 'employment', 'transit', 'property', 'methods']);
     state.currentId = match ? match[1] : 'westchester-county';
     state.theme = match && validThemes.has(match[2]) ? match[2] : 'population';
     if (state.data) renderProfile();
+  }
+
+  // Externally collected datasets are OPTIONAL: they are produced by
+  // scripts/run_collectors.sh, not by the main Census/GIS build. A missing or
+  // malformed file must leave the core dashboard fully working; the affected
+  // tab renders an explanatory message instead of failing the whole app.
+  async function loadOptional(key, path) {
+    try {
+      const response = await fetch(path);
+      if (!response.ok) return;
+      state[key] = await response.json();
+    } catch (_) {
+      /* leave state[key] null; renderer explains the situation */
+    }
   }
 
   async function init() {
@@ -363,6 +577,11 @@
       state.geo = await geoResponse.json();
       state.aggregateGeo = await aggregateGeoResponse.json();
       if (state.data.profiles.length !== 46 || state.geo.features.length !== 43 || state.aggregateGeo.features.length !== 2) throw new Error('Profile completeness check failed');
+      await Promise.all([
+        loadOptional('employment', 'data/employment/qcew_westchester.json'),
+        loadOptional('transit', 'data/gtfs/mnr_station_frequency.json'),
+        loadOptional('property', 'data/parcels/nyopendata_property_inventory.json'),
+      ]);
       $('#vintageLabel').textContent = `· ACS ${state.data.metadata.acs.vintage} 5-year`;
       renderDirectory();
       if (!window.location.hash) history.replaceState(null, '', themeRoute());

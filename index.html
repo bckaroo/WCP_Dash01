@@ -70,6 +70,9 @@
         <button type="button" data-theme="commute">Commute</button>
         <button type="button" data-theme="land-use">Land use</button>
         <button type="button" data-theme="economy">Economy</button>
+        <button type="button" data-theme="employment">Employment</button>
+        <button type="button" data-theme="transit">Transit</button>
+        <button type="button" data-theme="property">Property</button>
         <button type="button" data-theme="methods">Coverage &amp; methods</button>
       </nav>
 
@@ -98,6 +101,14 @@
             <a class="button secondary" href="artifacts/gis/wcp_town_aggregates_2024.gpkg" download>Town GeoPackage</a>
             <a class="button secondary" href="artifacts/gis/wcp_town_aggregates_2024.geojson" download>Town GeoJSON</a>
             <a class="button secondary" href="artifacts/gis/FIELD_DICTIONARY.csv" download>Field dictionary</a>
+          </div>
+        </section>
+        <section class="download-strip">
+          <div><p class="eyebrow">Open data</p><h3>Download integrated external datasets</h3><p>Extracted from BLS, MTA Metro-North, and NYS ORPTS public sources by the collectors in <code>scripts/</code>. Each file records its own source, vintage, and method notes.</p></div>
+          <div class="download-actions">
+            <a class="button secondary" href="data/employment/qcew_westchester.json" download>QCEW employment (JSON)</a>
+            <a class="button secondary" href="data/gtfs/mnr_station_frequency.json" download>Metro-North frequency (JSON)</a>
+            <a class="button secondary" href="data/parcels/nyopendata_property_inventory.json" download>ORPTS property inventory (JSON)</a>
           </div>
         </section>
       </section>

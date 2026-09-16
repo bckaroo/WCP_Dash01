@@ -205,20 +205,36 @@ def requirement_coverage():
         ("GR-02", "Households and occupancy", "implemented", "Occupancy, vacancy, and tenure indicators for every profile."),
         ("GR-03", "Housing-unit inventory", "implemented", "ACS structure and County parcel context for every profile."),
         ("GR-04", "Residential construction and permits", "located—not integrated", "County-level Census BPS files are available; municipal permit detail still requires an external request."),
-        ("GR-05", "Housing sales and values", "located—not integrated", "NYS ORPTS RP-5217 sales exports are located; a repeatable municipal ingest is not yet built."),
-        ("GR-06", "Condominium/cooperative inventory", "external data gap", "No complete public feed; County compilation is required."),
+        ("GR-05", "Housing sales and values", "partially implemented", "Municipal assessed full-market-value totals from the 2025 ORPTS assessment roll are integrated; recorded sale prices and RP-5217 transfer detail are not."),
+        ("GR-06", "Condominium/cooperative inventory", "partially implemented", "2025 NYS ORPTS assessment-roll parcel counts by municipality are integrated. ORPTS publishes no separate condominium class, so condo and co-op units fall within RPS class 411 (Apartments) and are reported as that broader apartment universe."),
         ("GR-07", "Household and family income", "implemented", "ACS income, home-value, rent, poverty, and burden indicators with MOEs."),
-        ("GR-08", "Employment and unemployment", "located—not integrated", "NYSDOL LAUS is located; QCEW access and geography method remain unresolved."),
+        ("GR-08", "Employment and unemployment", "partially implemented", "BLS QCEW is integrated for Westchester County: total covered employment, ownership split, and 20 NAICS private sectors. QCEW publishes at county granularity only; LAUS unemployment is not integrated."),
         ("GR-09", "Business and economic activity", "partially implemented", "County Business Patterns establishments, employees, and payroll are integrated; municipal detail is unavailable."),
         ("GR-10", "Major employers", "external data gap", "Establishment-level QCEW is confidential; a curated County table is required."),
         ("GR-11", "Consumer Price Index", "implemented", "Current BLS New York metro CPI-U series is integrated with year-over-year change."),
-        ("GR-12", "Transportation infrastructure and service", "partially implemented", "Resident commute mode is implemented; GTFS frequency and network accessibility remain future integrations."),
+        ("GR-12", "Transportation infrastructure and service", "partially implemented", "Resident commute mode and MTA Metro-North GTFS scheduled weekday station frequency are integrated by municipality; road network accessibility and traffic conditions are not."),
         ("GR-13", "Municipal and administrative geography", "implemented", "43 non-overlapping County GIS profiles plus two authoritative town overlays."),
         ("GR-14", "Schools and enrollment", "located—not integrated", "NYSED enrollment and County school layers are located; the district–municipality crosswalk is not built."),
-        ("GR-15", "Land use and development pattern", "partially implemented", "2025 assessment-parcel acreage by ORPTS primary class is integrated; zoning is not."),
+        ("GR-15", "Land use and development pattern", "partially implemented", "2025 County assessment-parcel acreage and NYS ORPTS municipal parcel counts by broad use class are integrated; zoning and land cover are not."),
         ("GR-16", "Historical time series and crosswalks", "partially implemented", "Current geography crosswalk is implemented; historical boundary normalization remains future work."),
     ]
     return [{"id": req_id, "title": title, "status": status, "note": note} for req_id, title, status, note in rows]
+
+
+def known_gaps() -> list[str]:
+    """Data this prototype deliberately does not represent, with the reason.
+
+    Each entry is a genuine limitation. Items are removed only when a real
+    source has been integrated, never replaced with a proxy.
+    """
+    return [
+        "Municipal building-permit detail is not public in one countywide source.",
+        "No public ORPTS or County feed separates condominium and cooperative units from the broader RPS class 411 apartment universe.",
+        "Major-employer establishment employment requires a curated County source; QCEW publishes at county granularity and establishment-level microdata are confidential.",
+        "CDBG-funded project locations lack a verified public countywide spatial layer.",
+        "This prototype does not yet integrate school enrollment, recorded property sales, or historical boundary-normalized trends from GR-04/05/14/16.",
+        "Westchester County GIS parcel land-use aggregates and the NYS ORPTS assessment roll are independent sources at different granularities; their municipal parcel counts are not expected to reconcile exactly.",
+    ]
 
 
 def chunks(values, size):
@@ -790,13 +806,7 @@ def main():
         "commute_universe": "Workers 16 years and over (ACS B08301). Mode shares include work from home; they are not peak-period trip shares.",
         "economic_context": economy,
         "requirements": requirement_coverage(),
-        "known_gaps": [
-            "Municipal building-permit detail is not public in one countywide source.",
-            "Condominium/cooperative inventory lacks a complete public feed.",
-            "Major-employer establishment employment requires a curated County source; QCEW microdata are confidential.",
-            "CDBG-funded project locations lack a verified public countywide spatial layer.",
-            "This prototype does not yet integrate GTFS service frequency, school enrollment, ORPTS sales, or historical boundary-normalized trends from GR-04/05/12/14/16.",
-        ],
+        "known_gaps": known_gaps(),
     }
 
     output = {"metadata": metadata, "profiles": profiles}
